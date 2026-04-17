@@ -71,9 +71,50 @@ export const taskTemplates: TaskTemplate[] = [
   { title: "Помочь накрыть на стол", description: "Помоги расставить тарелки", emoji: "🍽️", category: "helping", timeOfDay: "evening", ageGroup: "5-7", reward: 3 },
   { title: "Убрать со стола", description: "Убери посуду после ужина", emoji: "🍽️", category: "helping", timeOfDay: "evening", ageGroup: "8-10", reward: 3 },
 
+  // === УТРО (дополнительные) ===
+  { title: "Сказать доброе утро", description: "Скажи 'Доброе утро!' маме и папе", emoji: "☀️", category: "helping", timeOfDay: "morning", ageGroup: "2-4", reward: 1 },
+  { title: "Попить воды", description: "Выпей стакан воды утром", emoji: "💧", category: "hygiene", timeOfDay: "morning", ageGroup: "2-4", reward: 1 },
+  { title: "Помыть руки", description: "Помой руки с мылом", emoji: "🫧", category: "hygiene", timeOfDay: "morning", ageGroup: "2-4", reward: 1 },
+  { title: "Зарядка", description: "Сделай зарядку — 5 упражнений", emoji: "🤸", category: "hygiene", timeOfDay: "morning", ageGroup: "5-7", reward: 3 },
+  { title: "Зарядка", description: "Сделай утреннюю зарядку 10 минут", emoji: "🤸", category: "hygiene", timeOfDay: "morning", ageGroup: "8-10", reward: 3 },
+  { title: "Сложить пижаму", description: "Сложи пижаму аккуратно", emoji: "👚", category: "chores", timeOfDay: "morning", ageGroup: "2-4", reward: 2 },
+  { title: "Помочь готовить завтрак", description: "Помоги маме или папе с завтраком", emoji: "🍳", category: "helping", timeOfDay: "morning", ageGroup: "5-7", reward: 3 },
+
+  // === ДЕНЬ (дополнительные) ===
+  { title: "Поиграть на улице", description: "Погуляй на улице 30 минут", emoji: "🏃", category: "hygiene", timeOfDay: "afternoon", ageGroup: "2-4", reward: 3 },
+  { title: "Поиграть на улице", description: "Проведи время на свежем воздухе", emoji: "🏃", category: "hygiene", timeOfDay: "afternoon", ageGroup: "5-7", reward: 3 },
+  { title: "Помыть руки после прогулки", description: "Помой руки когда пришёл домой", emoji: "🫧", category: "hygiene", timeOfDay: "afternoon", ageGroup: "2-4", reward: 1 },
+  { title: "Пообедать", description: "Покушай обед и убери тарелку", emoji: "🍲", category: "hygiene", timeOfDay: "afternoon", ageGroup: "2-4", reward: 2 },
+  { title: "Пообедать", description: "Пообедай и помоги убрать со стола", emoji: "🍲", category: "hygiene", timeOfDay: "afternoon", ageGroup: "5-7", reward: 3 },
+  { title: "Лепить из пластилина", description: "Слепи что-нибудь из пластилина", emoji: "🎭", category: "learning", timeOfDay: "afternoon", ageGroup: "2-4", reward: 3 },
+  { title: "Построить из кубиков", description: "Построй башню или домик из кубиков", emoji: "🧱", category: "learning", timeOfDay: "afternoon", ageGroup: "2-4", reward: 2 },
+  { title: "Послушать сказку", description: "Послушай сказку или аудиокнигу", emoji: "🎧", category: "learning", timeOfDay: "afternoon", ageGroup: "2-4", reward: 2 },
+  { title: "Помочь с уборкой", description: "Помоги протереть стол или полку", emoji: "🧽", category: "helping", timeOfDay: "afternoon", ageGroup: "5-7", reward: 3 },
+  { title: "Разобрать вещи", description: "Разбери свой шкаф или полку", emoji: "🗄️", category: "chores", timeOfDay: "afternoon", ageGroup: "8-10", reward: 4 },
+  { title: "Написать письмо", description: "Напиши письмо бабушке или другу", emoji: "✉️", category: "learning", timeOfDay: "afternoon", ageGroup: "8-10", reward: 4 },
+
+  // === ВЕЧЕР (дополнительные) ===
+  { title: "Поужинать", description: "Покушай ужин за столом", emoji: "🍽️", category: "hygiene", timeOfDay: "evening", ageGroup: "2-4", reward: 2 },
+  { title: "Поужинать", description: "Поужинай и убери тарелку", emoji: "🍽️", category: "hygiene", timeOfDay: "evening", ageGroup: "5-7", reward: 2 },
+  { title: "Поцеловать маму", description: "Поцелуй маму перед сном", emoji: "😘", category: "helping", timeOfDay: "evening", ageGroup: "2-4", reward: 1 },
+  { title: "Обнять папу", description: "Обними папу перед сном", emoji: "🤗", category: "helping", timeOfDay: "evening", ageGroup: "2-4", reward: 1 },
+  { title: "Послушать сказку на ночь", description: "Послушай сказку перед сном", emoji: "📖", category: "learning", timeOfDay: "evening", ageGroup: "2-4", reward: 2 },
+  { title: "Помыть руки перед ужином", description: "Помой руки перед едой", emoji: "🫧", category: "hygiene", timeOfDay: "evening", ageGroup: "2-4", reward: 1 },
+  { title: "Умыться перед сном", description: "Умойся и протри лицо", emoji: "🧼", category: "hygiene", timeOfDay: "evening", ageGroup: "2-4", reward: 2 },
+  { title: "Надеть пижаму", description: "Переоденься в пижамку", emoji: "🩳", category: "hygiene", timeOfDay: "evening", ageGroup: "2-4", reward: 2 },
+  { title: "Надеть пижаму", description: "Переоденься в пижаму сам", emoji: "🩳", category: "hygiene", timeOfDay: "evening", ageGroup: "5-7", reward: 2 },
+  { title: "Помочь помыть посуду", description: "Помоги помыть посуду после ужина", emoji: "🍽️", category: "helping", timeOfDay: "evening", ageGroup: "5-7", reward: 3 },
+  { title: "Почитать перед сном", description: "Почитай книжку 15 минут", emoji: "📚", category: "learning", timeOfDay: "evening", ageGroup: "5-7", reward: 3 },
+  { title: "Почитать перед сном", description: "Почитай книгу 20 минут перед сном", emoji: "📚", category: "learning", timeOfDay: "evening", ageGroup: "8-10", reward: 3 },
+  { title: "Записать дневник", description: "Запиши в дневник что интересного было сегодня", emoji: "📓", category: "learning", timeOfDay: "evening", ageGroup: "8-10", reward: 4 },
+
   // === В ЛЮБОЕ ВРЕМЯ ===
   { title: "Сделать доброе дело", description: "Сделай что-то хорошее для кого-то", emoji: "💖", category: "helping", timeOfDay: "anytime", ageGroup: "2-4", reward: 4 },
   { title: "Сделать доброе дело", description: "Помоги кому-нибудь или сделай сюрприз", emoji: "💖", category: "helping", timeOfDay: "anytime", ageGroup: "5-7", reward: 4 },
   { title: "Полить цветы", description: "Полей домашние растения", emoji: "🌱", category: "chores", timeOfDay: "anytime", ageGroup: "5-7", reward: 3 },
   { title: "Полить цветы", description: "Полей цветы и проверь землю", emoji: "🌱", category: "chores", timeOfDay: "anytime", ageGroup: "8-10", reward: 2 },
+  { title: "Попить воды", description: "Выпей стакан воды", emoji: "💧", category: "hygiene", timeOfDay: "anytime", ageGroup: "2-4", reward: 1 },
+  { title: "Помыть руки", description: "Помой руки с мылом", emoji: "🫧", category: "hygiene", timeOfDay: "anytime", ageGroup: "5-7", reward: 1 },
+  { title: "Обнять брата или сестру", description: "Обними своего брата или сестру", emoji: "🤗", category: "helping", timeOfDay: "anytime", ageGroup: "2-4", reward: 2 },
+  { title: "Сказать спасибо", description: "Скажи кому-нибудь спасибо за помощь", emoji: "🙏", category: "helping", timeOfDay: "anytime", ageGroup: "2-4", reward: 1 },
 ];
