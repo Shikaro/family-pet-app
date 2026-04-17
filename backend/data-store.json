@@ -1,0 +1,112 @@
+{
+  "parentState": {
+    "coins": 14,
+    "childName": "Аня",
+    "childAge": 6,
+    "streakDays": 4
+  },
+  "petStatus": {
+    "name": "Топик",
+    "level": 2,
+    "happiness": 82,
+    "energy": 75,
+    "nextGoal": "Почитать сказку вместе",
+    "mood": "Любопытный"
+  },
+  "history": [
+    {
+      "id": "hist-1",
+      "time": "2026-04-17T12:27:08.548Z",
+      "message": "Аня выполнила задание 'Убрать игрушки'.",
+      "type": "task"
+    },
+    {
+      "id": "hist-2",
+      "time": "2026-04-17T12:42:08.549Z",
+      "message": "Питомец Топик получил еду и стал веселее.",
+      "type": "pet"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Убрать игрушки",
+      "description": "Сложи все игрушки в коробку и получи монетки.",
+      "ageRange": "3-6",
+      "completed": false,
+      "reward": 3,
+      "owner": "child",
+      "emoji": "🧸"
+    },
+    {
+      "id": "task-2",
+      "title": "Нарисовать цветок",
+      "description": "Нарисуй цветок и покажи родителю.",
+      "ageRange": "4-8",
+      "completed": false,
+      "reward": 4,
+      "owner": "family",
+      "emoji": "🌼"
+    },
+    {
+      "id": "task-3",
+      "title": "Прочитать одну страницу книги",
+      "description": "Выберите одну книгу и прочитай страницу вслух.",
+      "ageRange": "5-10",
+      "completed": false,
+      "reward": 5,
+      "owner": "family",
+      "emoji": "📚"
+    },
+    {
+      "id": "task-4",
+      "title": "Покормить питомца",
+      "description": "Помоги питомцу найти любимую еду и накормить его.",
+      "ageRange": "2-6",
+      "completed": false,
+      "reward": 2,
+      "owner": "child",
+      "emoji": "🥕"
+    },
+    {
+      "id": "task-5",
+      "title": "Построить башню из кубиков",
+      "description": "Собери башню из 5 кубиков вместе с родителем.",
+      "ageRange": "3-7",
+      "completed": false,
+      "reward": 3,
+      "owner": "family",
+      "emoji": "🧱"
+    }
+  ],
+  "dailyChallenge": {
+    "id": "challenge-1",
+    "title": "Найди добрый поступок",
+    "description": "Помоги ребенку выбрать и сделать добрый поступок сегодня.",
+    "reward": 7,
+    "completed": false
+  },
+  "rewards": [
+    {
+      "id": "reward-1",
+      "title": "Дополнительные 10 минут игры",
+      "description": "Обменяй монетки на игровое время с родителем.",
+      "cost": 8,
+      "redeemed": false
+    },
+    {
+      "id": "reward-2",
+      "title": "Маленький сюрприз",
+      "description": "Получить небольшой подарок по договоренности.",
+      "cost": 12,
+      "redeemed": false
+    },
+    {
+      "id": "reward-3",
+      "title": "Выбор вечера",
+      "description": "Обменяй монетки на право выбрать фильм или игру.",
+      "cost": 18,
+      "redeemed": false
+    }
+  ]
+}
