@@ -1,5 +1,5 @@
 import { Router, Response } from "express";
-import { getRewardsByFamily, saveReward, getFamilies, saveFamily } from "../storage";
+import { getRewardsByFamily, saveReward, saveFamily, deleteRewardById } from "../storage";
 import { authMiddleware, AuthRequest } from "../auth";
 import { Reward } from "../types";
 import crypto from "crypto";
@@ -45,17 +45,7 @@ router.delete("/:id", authMiddleware, (req: AuthRequest, res: Response) => {
     return res.status(404).json({ error: "Награда не найдена" });
   }
 
-  // Remove from storage
-  const { getRewards } = require("../storage");
-  const all = getRewards();
-  const filtered = all.filter((r: Reward) => r.id !== req.params.id);
-  const { writeJSON } = require("../storage");
-  // We'll just save filtered rewards
-  const fs = require("fs");
-  const path = require("path");
-  const dataDir = path.join(__dirname, "../../data");
-  fs.writeFileSync(path.join(dataDir, "rewards.json"), JSON.stringify(filtered, null, 2));
-
+  deleteRewardById(req.params.id);
   res.json({ ok: true });
 });
 

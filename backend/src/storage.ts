@@ -166,3 +166,8 @@ export function saveReward(reward: Reward) {
   }
   writeJSON("rewards", rewards);
 }
+
+export function deleteRewardById(id: string) {
+  const rewards = getRewards().filter((r) => r.id !== id);
+  writeJSON("rewards", rewards);
+}

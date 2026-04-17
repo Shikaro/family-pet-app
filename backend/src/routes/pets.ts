@@ -4,7 +4,7 @@ import { Pet, PetType } from "../types";
 import { getPetByChildId, savePet, saveFamily } from "../storage";
 import { authMiddleware, AuthRequest } from "../auth";
 
-const VALID_TYPES: PetType[] = ["cat", "dog", "hamster", "parrot", "rabbit", "turtle"];
+const VALID_TYPES: PetType[] = ["cat", "dog", "hamster", "parrot", "rabbit", "turtle", "dino"];
 
 const router = Router();
 
