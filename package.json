@@ -11,5 +11,8 @@
     "dev:backend": "npm --workspace backend run dev",
     "dev:frontend": "npm --workspace frontend run dev",
     "dev:bot": "npm --workspace bot run dev"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^6.0.1"
   }
 }

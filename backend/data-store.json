@@ -1,6 +1,6 @@
 {
   "parentState": {
-    "coins": 14,
+    "coins": 21,
     "childName": "Аня",
     "childAge": 6,
     "streakDays": 4
@@ -8,12 +8,18 @@
   "petStatus": {
     "name": "Топик",
     "level": 2,
-    "happiness": 82,
+    "happiness": 90,
     "energy": 75,
-    "nextGoal": "Почитать сказку вместе",
-    "mood": "Любопытный"
+    "nextGoal": "Сегодня уже было доброе дело",
+    "mood": "Гордый"
   },
   "history": [
+    {
+      "id": "hist-1776432855329",
+      "time": "2026-04-17T13:34:15.329Z",
+      "message": "Ежедневный челлендж 'Найди добрый поступок' выполнен.",
+      "type": "task"
+    },
     {
       "id": "hist-1",
       "time": "2026-04-17T12:27:08.548Z",
@@ -84,7 +90,7 @@
     "title": "Найди добрый поступок",
     "description": "Помоги ребенку выбрать и сделать добрый поступок сегодня.",
     "reward": 7,
-    "completed": false
+    "completed": true
   },
   "rewards": [
     {
