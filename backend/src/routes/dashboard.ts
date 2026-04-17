@@ -52,14 +52,16 @@ router.get("/parent", authMiddleware, (req: AuthRequest, res: Response) => {
     const tasks = allTasks.filter(
       (t) => t.ageGroup === group && (t.childId === null || t.childId === child.id)
     );
-    const completedToday = getCompletionsByChild(child.id, todayStr());
+    const completions = getCompletionsByChild(child.id, todayStr());
     const pet = getPetByChildId(child.id);
 
     return {
       child,
       pet,
-      completedToday: completedToday.length,
+      completedToday: completions.length,
       totalTasks: tasks.length,
+      tasks,
+      completions,
     };
   });
 
