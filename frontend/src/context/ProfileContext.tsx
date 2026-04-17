@@ -1,12 +1,13 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Child } from "../types";
 
-type ProfileMode = "parent" | "child";
+type ProfileMode = "parent" | "child" | "dashboard";
 
 interface ProfileState {
   mode: ProfileMode;
   activeChild: Child | null;
   setParentMode: () => void;
+  setDashboardMode: () => void;
   setChildMode: (child: Child) => void;
 }
 
@@ -22,6 +23,11 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("activeChildId");
   };
 
+  const setDashboardMode = () => {
+    setMode("dashboard");
+    setActiveChild(null);
+  };
+
   const setChildMode = (child: Child) => {
     setMode("child");
     setActiveChild(child);
@@ -29,7 +35,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <ProfileContext.Provider value={{ mode, activeChild, setParentMode, setChildMode }}>
+    <ProfileContext.Provider value={{ mode, activeChild, setParentMode, setDashboardMode, setChildMode }}>
       {children}
     </ProfileContext.Provider>
   );

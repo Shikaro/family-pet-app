@@ -1,4 +1,4 @@
-export type PetType = "cat" | "dog" | "hamster" | "parrot" | "rabbit" | "turtle";
+export type PetType = "cat" | "dog" | "hamster" | "parrot" | "rabbit" | "turtle" | "dino";
 export type TaskCategory = "hygiene" | "chores" | "helping" | "learning" | "pet_care";
 export type TimeOfDay = "morning" | "afternoon" | "evening" | "anytime";
 export type AgeGroup = "2-4" | "5-7" | "8-10";

@@ -12,7 +12,7 @@ interface Question {
 }
 
 const PET_EMOJIS: Record<string, string> = {
-  cat: "🐱", dog: "🐶", hamster: "🐹", parrot: "🦜", rabbit: "🐰", turtle: "🐢",
+  cat: "🐱", dog: "🐶", hamster: "🐹", parrot: "🦜", rabbit: "🐰", turtle: "🐢", dino: "🦕",
 };
 
 const PET_PHRASES_CORRECT = [

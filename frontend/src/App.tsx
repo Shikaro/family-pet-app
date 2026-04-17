@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "./context/AuthContext";
 import { useProfile } from "./context/ProfileContext";
+import { initSounds } from "./utils/sounds";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfileSelectPage from "./pages/ProfileSelectPage";
@@ -9,27 +10,29 @@ import ParentDashboard from "./pages/ParentDashboard";
 
 function App() {
   const { token, loading } = useAuth();
-  const { mode, activeChild } = useProfile();
+  const { mode } = useProfile();
   const [authMode, setAuthMode] = useState<"login" | "register">("login");
+
+  useEffect(() => { initSounds(); }, []);
 
   if (loading) {
     return <div className="loading-screen">🐾</div>;
   }
 
-  // Не авторизован
   if (!token) {
     return authMode === "login"
       ? <LoginPage onSwitch={() => setAuthMode("register")} />
       : <RegisterPage onSwitch={() => setAuthMode("login")} />;
   }
 
-  // Авторизован — выбираем режим
-  if (mode === "parent" && !activeChild) {
-    return <ProfileSelectPage />;
+  // Родительский дашборд
+  if (mode === "dashboard") {
+    return <ParentDashboard />;
   }
 
-  if (mode === "parent" && activeChild) {
-    return <ParentDashboard />;
+  // Выбор профиля
+  if (mode === "parent") {
+    return <ProfileSelectPage />;
   }
 
   // Детский режим

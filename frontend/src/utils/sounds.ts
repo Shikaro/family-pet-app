@@ -3,13 +3,35 @@
 let ctx: AudioContext | null = null;
 
 function getCtx(): AudioContext {
-  if (!ctx) ctx = new AudioContext();
+  if (!ctx) {
+    ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  }
+  // Resume if suspended (mobile browsers require user gesture)
+  if (ctx.state === "suspended") {
+    ctx.resume();
+  }
   return ctx;
+}
+
+// Resume audio on first user interaction (required for mobile)
+function ensureAudioReady() {
+  if (!ctx) return;
+  if (ctx.state === "suspended") ctx.resume();
+}
+
+// Attach global listener once
+if (typeof window !== "undefined") {
+  const resume = () => {
+    if (ctx && ctx.state === "suspended") ctx.resume();
+  };
+  document.addEventListener("touchstart", resume, { once: false, passive: true });
+  document.addEventListener("click", resume, { once: false, passive: true });
 }
 
 function playTone(freq: number, duration: number, type: OscillatorType = "sine", vol = 0.3) {
   try {
     const c = getCtx();
+    if (c.state === "suspended") return; // Can't play yet
     const osc = c.createOscillator();
     const gain = c.createGain();
     osc.type = type;
@@ -59,4 +81,9 @@ export function playComplete() {
   notes.forEach((f, i) => {
     setTimeout(() => playTone(f, 0.2, "sine", 0.2), i * 120);
   });
+}
+
+// Инициализация при первом вызове — создаём контекст заранее
+export function initSounds() {
+  getCtx();
 }

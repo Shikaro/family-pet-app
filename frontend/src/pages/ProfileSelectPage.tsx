@@ -6,7 +6,7 @@ import { Child } from "../types";
 
 export default function ProfileSelectPage() {
   const { family, logout, refreshFamily } = useAuth();
-  const { setParentMode, setChildMode } = useProfile();
+  const { setDashboardMode, setChildMode } = useProfile();
   const [showAddChild, setShowAddChild] = useState(false);
   const [childName, setChildName] = useState("");
   const [childAge, setChildAge] = useState("5");
@@ -42,7 +42,7 @@ export default function ProfileSelectPage() {
 
       <div className="profile-grid">
         {/* Кнопка родителя */}
-        <button className="profile-card parent-card" onClick={() => setParentMode()}>
+        <button className="profile-card parent-card" onClick={() => setDashboardMode()}>
           <div className="profile-avatar" style={{ background: "#6366f1" }}>
             👨‍👩‍👧
           </div>

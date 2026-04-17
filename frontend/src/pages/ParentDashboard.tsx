@@ -14,7 +14,7 @@ interface ChildStat {
 }
 
 const PET_EMOJIS: Record<string, string> = {
-  cat: "🐱", dog: "🐶", hamster: "🐹", parrot: "🦜", rabbit: "🐰", turtle: "🐢",
+  cat: "🐱", dog: "🐶", hamster: "🐹", parrot: "🦜", rabbit: "🐰", turtle: "🐢", dino: "🦕",
 };
 
 const TIME_LABELS: Record<string, string> = {
@@ -23,7 +23,7 @@ const TIME_LABELS: Record<string, string> = {
 
 export default function ParentDashboard() {
   const { family, logout } = useAuth();
-  const { setChildMode } = useProfile();
+  const { setChildMode, setParentMode } = useProfile();
   const [stats, setStats] = useState<ChildStat[]>([]);
   const [selectedChild, setSelectedChild] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -134,6 +134,7 @@ export default function ParentDashboard() {
   return (
     <div className="parent-dashboard">
       <div className="parent-header">
+        <button className="back-btn" onClick={setParentMode}>←</button>
         <h1>Семья</h1>
         <button className="logout-btn" onClick={logout}>Выйти</button>
       </div>

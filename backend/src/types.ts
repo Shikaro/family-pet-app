@@ -29,7 +29,7 @@ export interface Session {
 
 // === Питомцы ===
 
-export type PetType = "cat" | "dog" | "hamster" | "parrot" | "rabbit" | "turtle";
+export type PetType = "cat" | "dog" | "hamster" | "parrot" | "rabbit" | "turtle" | "dino";
 
 export interface Pet {
   id: string;

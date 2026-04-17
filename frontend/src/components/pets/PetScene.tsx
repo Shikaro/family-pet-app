@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Pet } from "../../types";
+import { playTap, playPetHappy } from "../../utils/sounds";
 
 const PET_EMOJIS: Record<string, string> = {
   cat: "🐱",
@@ -8,6 +9,7 @@ const PET_EMOJIS: Record<string, string> = {
   parrot: "🦜",
   rabbit: "🐰",
   turtle: "🐢",
+  dino: "🦕",
 };
 
 const MOOD_FACES: Record<string, string> = {
@@ -49,6 +51,7 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
       // Свайп вверх — кормить
       triggerAnimation("feed");
       showParticles(["🍎", "🥕", "🍪"]);
+      playPetHappy();
       onSwipeUp();
     }
   };
@@ -56,6 +59,7 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
   const handleClick = () => {
     triggerAnimation("bounce");
     showParticles(["💖", "⭐", "✨"]);
+    playTap();
     onTap();
   };
 

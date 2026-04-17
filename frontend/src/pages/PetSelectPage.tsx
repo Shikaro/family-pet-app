@@ -11,6 +11,7 @@ const PETS: { type: PetType; emoji: string; name: string }[] = [
   { type: "parrot", emoji: "🦜", name: "Попугай" },
   { type: "rabbit", emoji: "🐰", name: "Кролик" },
   { type: "turtle", emoji: "🐢", name: "Черепашка" },
+  { type: "dino", emoji: "🦕", name: "Динозаврик" },
 ];
 
 export default function PetSelectPage({ onDone }: { onDone: () => void }) {
