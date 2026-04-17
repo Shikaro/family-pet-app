@@ -6,6 +6,7 @@ import PetScene from "../components/pets/PetScene";
 import PetSelectPage from "./PetSelectPage";
 import CoinAnimation from "../components/CoinAnimation";
 import LessonGame from "../components/LessonGame";
+import RewardShop from "../components/RewardShop";
 import { playComplete, playPetHappy } from "../utils/sounds";
 
 const TIME_LABELS: Record<string, string> = {
@@ -37,7 +38,8 @@ export default function ChildDashboard() {
   const [showCoins, setShowCoins] = useState<number | null>(null);
   const [completingId, setCompletingId] = useState<string | null>(null);
   const [showLesson, setShowLesson] = useState(false);
-  const [activeTab, setActiveTab] = useState<"tasks" | "learn">("tasks");
+  const [showShop, setShowShop] = useState(false);
+  const [activeTab, setActiveTab] = useState<"tasks" | "learn" | "shop">("tasks");
 
   const load = async () => {
     if (!activeChild) return;
@@ -63,7 +65,18 @@ export default function ChildDashboard() {
           setShowCoins(amount);
           load();
         }}
-        onClose={() => setShowLesson(false)}
+        onClose={() => { setShowLesson(false); setActiveTab("tasks"); }}
+      />
+    );
+  }
+
+  if (showShop) {
+    return (
+      <RewardShop
+        childId={activeChild.id}
+        coins={data.coins}
+        onSpend={() => load()}
+        onClose={() => { setShowShop(false); setActiveTab("tasks"); }}
       />
     );
   }
@@ -137,6 +150,12 @@ export default function ChildDashboard() {
           onClick={() => { setActiveTab("learn"); setShowLesson(true); }}
         >
           📚 Учиться
+        </button>
+        <button
+          className={`main-tab ${activeTab === "shop" ? "active" : ""}`}
+          onClick={() => { setActiveTab("shop"); setShowShop(true); }}
+        >
+          🎁 Призы
         </button>
       </div>
 

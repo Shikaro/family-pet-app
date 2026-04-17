@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useProfile } from "../context/ProfileContext";
-import { getParentDashboard } from "../api";
-import { Child, Pet, Task, TaskCompletion } from "../types";
+import { getParentDashboard, getRewards, createReward, deleteReward } from "../api";
+import { Child, Pet, Task, TaskCompletion, Reward } from "../types";
 
 interface ChildStat {
   child: Child;
@@ -27,16 +27,47 @@ export default function ParentDashboard() {
   const [stats, setStats] = useState<ChildStat[]>([]);
   const [selectedChild, setSelectedChild] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [rewards, setRewards] = useState<Reward[]>([]);
+  const [showAddReward, setShowAddReward] = useState(false);
+  const [rewardTitle, setRewardTitle] = useState("");
+  const [rewardCost, setRewardCost] = useState("10");
+  const [rewardEmoji, setRewardEmoji] = useState("🎁");
+  const [rewardDesc, setRewardDesc] = useState("");
+  const [parentTab, setParentTab] = useState<"children" | "rewards">("children");
 
   const load = async () => {
     try {
       const d = await getParentDashboard();
       setStats(d.childrenStats);
     } catch {}
+    try {
+      const r = await getRewards();
+      setRewards(r);
+    } catch {}
     setLoading(false);
   };
 
   useEffect(() => { load(); }, []);
+
+  const handleAddReward = async () => {
+    if (!rewardTitle.trim()) return;
+    try {
+      await createReward(rewardTitle.trim(), Number(rewardCost), rewardEmoji, rewardDesc.trim());
+      setRewardTitle("");
+      setRewardCost("10");
+      setRewardEmoji("🎁");
+      setRewardDesc("");
+      setShowAddReward(false);
+      await load();
+    } catch {}
+  };
+
+  const handleDeleteReward = async (id: string) => {
+    try {
+      await deleteReward(id);
+      await load();
+    } catch {}
+  };
 
   if (!family) return null;
   if (loading) return <div className="loading-screen">⏳</div>;
@@ -151,52 +182,143 @@ export default function ParentDashboard() {
         </div>
       </div>
 
-      {stats.length === 0 ? (
-        <div className="empty-parent">
-          <p>Добавьте детей на экране выбора профиля</p>
-        </div>
-      ) : (
-        <div className="children-stats">
-          {stats.map((s) => {
-            const pct = s.totalTasks > 0 ? Math.round((s.completedToday / s.totalTasks) * 100) : 0;
-            return (
-              <div
-                key={s.child.id}
-                className="child-stat-card-v2"
-                onClick={() => setSelectedChild(s.child.id)}
-              >
-                <div className="csc-top">
-                  <div className="csc-avatar" style={{ background: s.child.avatarColor }}>
-                    {s.child.gender === "boy" ? "👦" : "👧"}
-                  </div>
-                  <div className="csc-info">
-                    <h3>{s.child.name}</h3>
-                    <span className="csc-age">{s.child.age} {s.child.age < 5 ? "года" : "лет"}</span>
-                  </div>
-                  {s.pet && (
-                    <div className="csc-pet">
-                      {PET_EMOJIS[s.pet.type] || "🐾"} {s.pet.name}
+      {/* Табы: Дети / Награды */}
+      <div className="main-tabs">
+        <button
+          className={`main-tab ${parentTab === "children" ? "active" : ""}`}
+          onClick={() => setParentTab("children")}
+        >
+          👶 Дети
+        </button>
+        <button
+          className={`main-tab ${parentTab === "rewards" ? "active" : ""}`}
+          onClick={() => setParentTab("rewards")}
+        >
+          🎁 Награды
+        </button>
+      </div>
+
+      {parentTab === "children" && (
+        <>
+          {stats.length === 0 ? (
+            <div className="empty-parent">
+              <p>Добавьте детей на экране выбора профиля</p>
+            </div>
+          ) : (
+            <div className="children-stats">
+              {stats.map((s) => {
+                const pct = s.totalTasks > 0 ? Math.round((s.completedToday / s.totalTasks) * 100) : 0;
+                return (
+                  <div
+                    key={s.child.id}
+                    className="child-stat-card-v2"
+                    onClick={() => setSelectedChild(s.child.id)}
+                  >
+                    <div className="csc-top">
+                      <div className="csc-avatar" style={{ background: s.child.avatarColor }}>
+                        {s.child.gender === "boy" ? "👦" : "👧"}
+                      </div>
+                      <div className="csc-info">
+                        <h3>{s.child.name}</h3>
+                        <span className="csc-age">{s.child.age} {s.child.age < 5 ? "года" : "лет"}</span>
+                      </div>
+                      {s.pet && (
+                        <div className="csc-pet">
+                          {PET_EMOJIS[s.pet.type] || "🐾"} {s.pet.name}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
 
-                <div className="csc-progress">
-                  <div className="csc-progress-bar">
-                    <div className="csc-progress-fill" style={{ width: `${pct}%` }} />
+                    <div className="csc-progress">
+                      <div className="csc-progress-bar">
+                        <div className="csc-progress-fill" style={{ width: `${pct}%` }} />
+                      </div>
+                      <span className="csc-progress-text">
+                        {s.completedToday}/{s.totalTasks} ({pct}%)
+                      </span>
+                    </div>
+
+                    <div className="csc-bottom">
+                      <span>🪙 {s.child.coins}</span>
+                      <span>🔥 {s.child.streakDays} дн.</span>
+                      <span className="csc-arrow">→</span>
+                    </div>
                   </div>
-                  <span className="csc-progress-text">
-                    {s.completedToday}/{s.totalTasks} ({pct}%)
-                  </span>
-                </div>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
 
-                <div className="csc-bottom">
-                  <span>🪙 {s.child.coins}</span>
-                  <span>🔥 {s.child.streakDays} дн.</span>
-                  <span className="csc-arrow">→</span>
-                </div>
+      {parentTab === "rewards" && (
+        <div className="rewards-manage">
+          <div className="rewards-list">
+            {rewards.length === 0 ? (
+              <div className="empty-parent">
+                <p>Добавьте награды, которые дети смогут купить за монетки</p>
               </div>
-            );
-          })}
+            ) : (
+              rewards.map((r) => (
+                <div key={r.id} className="reward-manage-item">
+                  <span className="reward-manage-emoji">{r.emoji}</span>
+                  <div className="reward-manage-info">
+                    <span className="reward-manage-title">{r.title}</span>
+                    {r.description && <span className="reward-manage-desc">{r.description}</span>}
+                  </div>
+                  <span className="reward-manage-cost">🪙 {r.cost}</span>
+                  <button className="reward-delete-btn" onClick={() => handleDeleteReward(r.id)}>✕</button>
+                </div>
+              ))
+            )}
+          </div>
+
+          {showAddReward ? (
+            <div className="reward-add-form">
+              <div className="reward-emoji-row">
+                {["🎁", "🍬", "🎮", "📱", "🎬", "🛹", "🧸", "🎨", "⚽", "🍕", "🎂", "🏖️"].map((e) => (
+                  <button
+                    key={e}
+                    className={`emoji-pick ${rewardEmoji === e ? "active" : ""}`}
+                    onClick={() => setRewardEmoji(e)}
+                  >
+                    {e}
+                  </button>
+                ))}
+              </div>
+              <input
+                type="text"
+                placeholder="Название (напр. Мороженое)"
+                value={rewardTitle}
+                onChange={(e) => setRewardTitle(e.target.value)}
+                autoFocus
+              />
+              <input
+                type="text"
+                placeholder="Описание (необязательно)"
+                value={rewardDesc}
+                onChange={(e) => setRewardDesc(e.target.value)}
+              />
+              <div className="reward-cost-row">
+                <label>Стоимость: 🪙</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="999"
+                  value={rewardCost}
+                  onChange={(e) => setRewardCost(e.target.value)}
+                />
+              </div>
+              <div className="reward-form-actions">
+                <button onClick={handleAddReward}>Добавить</button>
+                <button className="secondary" onClick={() => setShowAddReward(false)}>Отмена</button>
+              </div>
+            </div>
+          ) : (
+            <button className="add-reward-btn" onClick={() => setShowAddReward(true)}>
+              + Добавить награду
+            </button>
+          )}
         </div>
       )}
     </div>

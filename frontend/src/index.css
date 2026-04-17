@@ -1454,6 +1454,254 @@ input, select {
   to { transform: scale(1); opacity: 1; }
 }
 
+/* === Reward Shop (child) === */
+.shop-page {
+  min-height: 100vh;
+  padding: 0 0 40px;
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.shop-header h2 {
+  flex: 1;
+  font-size: 1.2rem;
+}
+
+.shop-coins {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.shop-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-light);
+}
+
+.shop-empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.shop-empty-hint {
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
+}
+
+.shop-item {
+  background: var(--card);
+  border-radius: 20px;
+  border: 2px solid var(--border);
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.shop-item:active:not(.too-expensive) {
+  transform: scale(0.96);
+  border-color: var(--green);
+}
+
+.shop-item.too-expensive {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.shop-item-emoji {
+  font-size: 2.4rem;
+}
+
+.shop-item-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.shop-item-desc {
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.shop-item-price {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.shop-item-price.red {
+  color: #ef4444;
+}
+
+.shop-message {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--purple);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  animation: popIn 0.3s ease;
+  z-index: 100;
+}
+
+/* === Reward Management (parent) === */
+.rewards-manage {
+  padding: 16px;
+}
+
+.rewards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.reward-manage-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--card);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.reward-manage-emoji {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.reward-manage-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.reward-manage-title {
+  display: block;
+  font-weight: 600;
+}
+
+.reward-manage-desc {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-light);
+}
+
+.reward-manage-cost {
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.reward-delete-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fee2e2;
+  color: #ef4444;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.add-reward-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--purple);
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  border-radius: 16px;
+}
+
+.reward-add-form {
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reward-emoji-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.emoji-pick {
+  font-size: 1.4rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emoji-pick.active {
+  background: var(--purple);
+  box-shadow: 0 0 0 2px var(--purple);
+}
+
+.reward-cost-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reward-cost-row label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.reward-cost-row input {
+  width: 80px;
+}
+
+.reward-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.reward-form-actions button {
+  flex: 1;
+  padding: 12px;
+  font-weight: 700;
+  background: var(--purple);
+  color: white;
+  border-radius: 12px;
+}
+
+.reward-form-actions button.secondary {
+  background: #f1f5f9;
+  color: var(--text);
+}
+
 /* === Responsive === */
 @media (max-width: 480px) {
   .profile-grid {

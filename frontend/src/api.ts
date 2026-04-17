@@ -106,3 +106,26 @@ export async function getChildDashboard(childId: string) {
 export async function getParentDashboard() {
   return request<any>(`/dashboard/parent`);
 }
+
+// Rewards / Shop
+export async function getRewards() {
+  return request<any[]>("/rewards");
+}
+
+export async function createReward(title: string, cost: number, emoji: string, description: string) {
+  return request<any>("/rewards", {
+    method: "POST",
+    body: JSON.stringify({ title, cost, emoji, description }),
+  });
+}
+
+export async function deleteReward(id: string) {
+  return request<any>(`/rewards/${id}`, { method: "DELETE" });
+}
+
+export async function redeemReward(rewardId: string, childId: string) {
+  return request<any>(`/rewards/${rewardId}/redeem`, {
+    method: "POST",
+    body: JSON.stringify({ childId }),
+  });
+}

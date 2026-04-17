@@ -65,6 +65,15 @@ export interface ChildDashboard {
   streakDays: number;
 }
 
+export interface Reward {
+  id: string;
+  familyId: string;
+  title: string;
+  description: string;
+  emoji: string;
+  cost: number;
+}
+
 export interface ParentDashboard {
   family: FamilyInfo;
   childrenStats: Array<{
