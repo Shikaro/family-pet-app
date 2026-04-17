@@ -6,6 +6,7 @@ import PetScene from "../components/pets/PetScene";
 import PetSelectPage from "./PetSelectPage";
 import CoinAnimation from "../components/CoinAnimation";
 import LessonGame from "../components/LessonGame";
+import { playComplete, playPetHappy } from "../utils/sounds";
 
 const TIME_LABELS: Record<string, string> = {
   morning: "🌅 Утро",
@@ -80,9 +81,8 @@ export default function ChildDashboard() {
 
     try {
       await completeTask(task.id, activeChild.id);
-      // Показываем анимацию монеток
+      playComplete();
       setShowCoins(task.reward);
-      // Вибрация
       if (navigator.vibrate) navigator.vibrate([50, 30, 80]);
       await load();
     } catch {}
@@ -90,11 +90,11 @@ export default function ChildDashboard() {
   };
 
   const handleFeed = async () => {
-    try { await feedPet(activeChild.id); await load(); } catch {}
+    try { playPetHappy(); await feedPet(activeChild.id); await load(); } catch {}
   };
 
   const handlePlay = async () => {
-    try { await playPet(activeChild.id); await load(); } catch {}
+    try { playPetHappy(); await playPet(activeChild.id); await load(); } catch {}
   };
 
   return (

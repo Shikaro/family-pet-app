@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { playCoins } from "../utils/sounds";
 
 interface Props {
   count: number;
@@ -9,14 +10,13 @@ export default function CoinAnimation({ count, onDone }: Props) {
   const [coins, setCoins] = useState<number[]>([]);
 
   useEffect(() => {
-    // Создаём монеты с задержкой
     const ids: number[] = [];
     for (let i = 0; i < count; i++) {
       ids.push(i);
     }
     setCoins(ids);
 
-    // Вибрация
+    playCoins();
     if (navigator.vibrate) {
       navigator.vibrate([50, 30, 50]);
     }
