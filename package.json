@@ -10,7 +10,9 @@
   "scripts": {
     "dev:backend": "npm --workspace backend run dev",
     "dev:frontend": "npm --workspace frontend run dev",
-    "dev:bot": "npm --workspace bot run dev"
+    "dev:bot": "npm --workspace bot run dev",
+    "build": "npm --workspace frontend run build && npm --workspace backend run build",
+    "start": "npm --workspace backend run start"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^6.0.1"

@@ -1,6 +1,6 @@
 import { Dashboard } from "./types";
 
-const baseUrl = "/api";
+const baseUrl = import.meta.env.VITE_API_URL || "/api";
 
 export async function fetchDashboard(): Promise<Dashboard> {
   const response = await fetch(`${baseUrl}/dashboard`);
