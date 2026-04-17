@@ -1,58 +1,76 @@
-export interface Task {
+export type PetType = "cat" | "dog" | "hamster" | "parrot" | "rabbit" | "turtle";
+export type TaskCategory = "hygiene" | "chores" | "helping" | "learning" | "pet_care";
+export type TimeOfDay = "morning" | "afternoon" | "evening" | "anytime";
+export type AgeGroup = "2-4" | "5-7" | "8-10";
+
+export interface Child {
   id: string;
-  title: string;
-  description: string;
-  ageRange: string;
-  completed: boolean;
-  reward: number;
-  owner: "parent" | "child" | "family";
-  emoji: string;
+  name: string;
+  age: number;
+  gender: "boy" | "girl";
+  avatarColor: string;
+  petId: string | null;
+  coins: number;
+  streakDays: number;
+  lastActiveDate: string | null;
 }
 
-export interface Reward {
+export interface Pet {
   id: string;
-  title: string;
-  description: string;
-  cost: number;
-  redeemed: boolean;
-}
-
-export interface Challenge {
-  id: string;
-  title: string;
-  description: string;
-  reward: number;
-  completed: boolean;
-}
-
-export interface PetStatus {
+  childId: string;
+  type: PetType;
   name: string;
   level: number;
   happiness: number;
   energy: number;
-  nextGoal: string;
   mood: string;
 }
 
-export interface ParentState {
+export interface Task {
+  id: string;
+  familyId: string;
+  childId: string | null;
+  title: string;
+  description: string;
+  emoji: string;
+  category: TaskCategory;
+  timeOfDay: TimeOfDay;
+  ageGroup: AgeGroup;
+  reward: number;
+  isTemplate: boolean;
+  isCustom: boolean;
+}
+
+export interface TaskCompletion {
+  id: string;
+  taskId: string;
+  childId: string;
+  completedAt: string;
+  confirmedByParent: boolean;
+}
+
+export interface FamilyInfo {
+  id: string;
+  parentName: string;
+  email: string;
+  children: Child[];
+}
+
+export interface ChildDashboard {
+  child: Child;
+  pet: Pet | null;
+  tasks: Task[];
+  completedToday: TaskCompletion[];
   coins: number;
-  childName: string;
-  childAge: number;
   streakDays: number;
 }
 
-export interface HistoryItem {
-  id: string;
-  time: string;
-  message: string;
-  type: "task" | "reward" | "pet";
-}
-
-export interface Dashboard {
-  parent: ParentState;
-  tasks: Task[];
-  rewards: Reward[];
-  pet: PetStatus;
-  history: HistoryItem[];
-  challenge: Challenge;
+export interface ParentDashboard {
+  family: FamilyInfo;
+  childrenStats: Array<{
+    child: Child;
+    pet: Pet | null;
+    completedToday: number;
+    totalTasks: number;
+  }>;
 }
