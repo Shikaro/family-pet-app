@@ -26,35 +26,48 @@ export default function LoginPage({ onSwitch }: { onSwitch: () => void }) {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">🐾</div>
-        <h1>Family Pet</h1>
-        <p className="auth-subtitle">Войдите в аккаунт</p>
+        <div className="auth-hero">
+          <div className="auth-pets">
+            <span className="auth-pet a1">🐱</span>
+            <span className="auth-pet a2">🐶</span>
+            <span className="auth-pet a3">🐹</span>
+          </div>
+          <h1>Family Pet</h1>
+          <p className="auth-tagline">Семейная игра с заданиями и питомцами</p>
+        </div>
 
         <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="input-wrap">
+            <span className="input-icon">📧</span>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-wrap">
+            <span className="input-icon">🔒</span>
+            <input
+              type="password"
+              placeholder="Пароль"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
           {error && <p className="auth-error">{error}</p>}
-          <button type="submit" disabled={loading}>
+          <button type="submit" disabled={loading} className="auth-submit">
             {loading ? "Вход..." : "Войти"}
           </button>
         </form>
 
-        <p className="auth-switch">
-          Нет аккаунта?{" "}
-          <span onClick={onSwitch}>Зарегистрироваться</span>
-        </p>
+        <div className="auth-divider"><span>или</span></div>
+
+        <button className="auth-alt-btn" onClick={onSwitch}>
+          Создать семейный аккаунт
+        </button>
       </div>
     </div>
   );

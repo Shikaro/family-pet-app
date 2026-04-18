@@ -13,6 +13,10 @@ export default function RegisterPage({ onSwitch }: { onSwitch: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    if (password.length < 4) {
+      setError("Пароль минимум 4 символа");
+      return;
+    }
     setLoading(true);
     try {
       const data = await register(name, email, password);
@@ -27,43 +31,60 @@ export default function RegisterPage({ onSwitch }: { onSwitch: () => void }) {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">🐾</div>
-        <h1>Family Pet</h1>
-        <p className="auth-subtitle">Создайте аккаунт семьи</p>
+        <div className="auth-hero">
+          <div className="auth-pets">
+            <span className="auth-pet a1">🦕</span>
+            <span className="auth-pet a2">🐰</span>
+            <span className="auth-pet a3">🦜</span>
+          </div>
+          <h1>Family Pet</h1>
+          <p className="auth-tagline">Создайте аккаунт для всей семьи</p>
+        </div>
 
         <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Ваше имя"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Пароль (мин. 4 символа)"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            minLength={4}
-            required
-          />
+          <div className="input-wrap">
+            <span className="input-icon">👤</span>
+            <input
+              type="text"
+              placeholder="Ваше имя"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoFocus
+            />
+          </div>
+          <div className="input-wrap">
+            <span className="input-icon">📧</span>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-wrap">
+            <span className="input-icon">🔒</span>
+            <input
+              type="password"
+              placeholder="Пароль (мин. 4 символа)"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength={4}
+              required
+            />
+          </div>
           {error && <p className="auth-error">{error}</p>}
-          <button type="submit" disabled={loading}>
-            {loading ? "Регистрация..." : "Зарегистрироваться"}
+          <button type="submit" disabled={loading} className="auth-submit">
+            {loading ? "Создание..." : "Создать аккаунт"}
           </button>
         </form>
 
-        <p className="auth-switch">
-          Уже есть аккаунт?{" "}
-          <span onClick={onSwitch}>Войти</span>
-        </p>
+        <div className="auth-divider"><span>или</span></div>
+
+        <button className="auth-alt-btn" onClick={onSwitch}>
+          Уже есть аккаунт? Войти
+        </button>
       </div>
     </div>
   );
