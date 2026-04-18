@@ -1,73 +1,101 @@
 // Web Audio API sound effects — no external files needed
+// Robust mobile/iOS unlock strategy
 
 let ctx: AudioContext | null = null;
-let unlocked = false;
+let isUnlocked = false;
 
-function getCtx(): AudioContext {
+function ensureCtx(): AudioContext {
   if (!ctx) {
-    ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const AC = window.AudioContext || (window as any).webkitAudioContext;
+    ctx = new AC();
   }
   return ctx;
 }
 
-// Unlock audio on first user interaction (required for mobile/iOS)
-function unlockAudio() {
-  if (unlocked) return;
-  const c = getCtx();
+// Must be called INSIDE a user gesture (click/touch handler)
+function tryUnlock() {
+  if (isUnlocked) return;
+  const c = ensureCtx();
+
+  // Resume suspended context
   if (c.state === "suspended") {
-    c.resume().then(() => {
-      unlocked = true;
-    });
-  } else {
-    unlocked = true;
+    c.resume();
   }
-  // Play silent buffer to fully unlock on iOS
-  try {
-    const buf = c.createBuffer(1, 1, 22050);
-    const src = c.createBufferSource();
-    src.buffer = buf;
-    src.connect(c.destination);
-    src.start(0);
-  } catch {}
+
+  // Play silent buffer — the only reliable way to unlock iOS audio
+  const buf = c.createBuffer(1, 1, 22050);
+  const src = c.createBufferSource();
+  src.buffer = buf;
+  src.connect(c.destination);
+  src.start(0);
+  src.onended = () => {
+    isUnlocked = true;
+  };
+
+  // Also mark as unlocked if context is already running
+  if (c.state === "running") {
+    isUnlocked = true;
+  }
 }
 
-// Attach global listeners
+// Global listeners — these fire on EVERY touch/click to ensure unlock
 if (typeof window !== "undefined") {
-  const events = ["touchstart", "touchend", "click", "keydown"];
-  events.forEach((evt) => {
-    document.addEventListener(evt, unlockAudio, { passive: true });
-  });
+  const handler = () => tryUnlock();
+  document.addEventListener("touchstart", handler, { passive: true });
+  document.addEventListener("touchend", handler, { passive: true });
+  document.addEventListener("click", handler, { passive: true });
 }
 
 function playTone(freq: number, duration: number, type: OscillatorType = "sine", vol = 0.3) {
   try {
-    const c = getCtx();
-    // Try to resume if suspended (don't skip — queue the sound)
+    const c = ensureCtx();
+
+    // Always try to resume
     if (c.state === "suspended") {
       c.resume();
+      return; // Don't try to play while suspended — next interaction will work
     }
+
     const osc = c.createOscillator();
     const gain = c.createGain();
     osc.type = type;
-    osc.frequency.value = freq;
-    gain.gain.value = vol;
-    gain.gain.exponentialRampToValueAtTime(0.01, c.currentTime + duration);
+    osc.frequency.setValueAtTime(freq, c.currentTime);
+    gain.gain.setValueAtTime(vol, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + duration);
     osc.connect(gain);
     gain.connect(c.destination);
-    osc.start();
+    osc.start(c.currentTime);
     osc.stop(c.currentTime + duration);
-  } catch {}
+  } catch (e) {
+    // Silently fail — don't break the app over audio
+  }
 }
 
-export function playCoins() {
-  [800, 1000, 1200, 1400].forEach((f, i) => {
-    setTimeout(() => playTone(f, 0.15, "sine", 0.2), i * 80);
+// Convenience: schedule multiple tones with delays
+function playSequence(notes: Array<{ freq: number; delay: number; dur: number; type?: OscillatorType; vol?: number }>) {
+  notes.forEach((n) => {
+    if (n.delay === 0) {
+      playTone(n.freq, n.dur, n.type || "sine", n.vol || 0.2);
+    } else {
+      setTimeout(() => playTone(n.freq, n.dur, n.type || "sine", n.vol || 0.2), n.delay);
+    }
   });
 }
 
+export function playCoins() {
+  playSequence([
+    { freq: 800, delay: 0, dur: 0.15 },
+    { freq: 1000, delay: 80, dur: 0.15 },
+    { freq: 1200, delay: 160, dur: 0.15 },
+    { freq: 1400, delay: 240, dur: 0.15 },
+  ]);
+}
+
 export function playCorrect() {
-  playTone(523, 0.15, "sine", 0.25);
-  setTimeout(() => playTone(784, 0.25, "sine", 0.25), 120);
+  playSequence([
+    { freq: 523, delay: 0, dur: 0.15, vol: 0.25 },
+    { freq: 784, delay: 120, dur: 0.25, vol: 0.25 },
+  ]);
 }
 
 export function playWrong() {
@@ -75,9 +103,11 @@ export function playWrong() {
 }
 
 export function playPetHappy() {
-  [660, 880, 1100].forEach((f, i) => {
-    setTimeout(() => playTone(f, 0.12, "sine", 0.15), i * 100);
-  });
+  playSequence([
+    { freq: 660, delay: 0, dur: 0.12, vol: 0.15 },
+    { freq: 880, delay: 100, dur: 0.12, vol: 0.15 },
+    { freq: 1100, delay: 200, dur: 0.12, vol: 0.15 },
+  ]);
 }
 
 export function playTap() {
@@ -85,21 +115,25 @@ export function playTap() {
 }
 
 export function playComplete() {
-  const notes = [523, 659, 784, 1047];
-  notes.forEach((f, i) => {
-    setTimeout(() => playTone(f, 0.2, "sine", 0.2), i * 120);
-  });
+  playSequence([
+    { freq: 523, delay: 0, dur: 0.2 },
+    { freq: 659, delay: 120, dur: 0.2 },
+    { freq: 784, delay: 240, dur: 0.2 },
+    { freq: 1047, delay: 360, dur: 0.3 },
+  ]);
 }
 
-// Jingle for new achievement
 export function playAchievement() {
-  const notes = [523, 659, 784, 1047, 1319];
-  notes.forEach((f, i) => {
-    setTimeout(() => playTone(f, 0.25, "sine", 0.25), i * 150);
-  });
+  playSequence([
+    { freq: 523, delay: 0, dur: 0.2, vol: 0.25 },
+    { freq: 659, delay: 150, dur: 0.2, vol: 0.25 },
+    { freq: 784, delay: 300, dur: 0.2, vol: 0.25 },
+    { freq: 1047, delay: 450, dur: 0.25, vol: 0.3 },
+    { freq: 1319, delay: 600, dur: 0.35, vol: 0.3 },
+  ]);
 }
 
 export function initSounds() {
-  getCtx();
-  unlockAudio();
+  // Pre-create context (will be unlocked on first user gesture)
+  ensureCtx();
 }
