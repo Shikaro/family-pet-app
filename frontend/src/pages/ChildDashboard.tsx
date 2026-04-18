@@ -168,7 +168,18 @@ export default function ChildDashboard() {
         </div>
       </div>
 
-      {/* Быстрые кнопки */}
+      {/* Питомец */}
+      {data.pet && (
+        <div className="pet-area">
+          <PetScene pet={data.pet} onTap={handlePlay} onSwipeUp={handleFeed} />
+          <div className="pet-status-bar">
+            <span>{data.pet.name} · Ур. {data.pet.level}</span>
+            <span>😊 {data.pet.happiness}% · ⚡ {data.pet.energy}%</span>
+          </div>
+        </div>
+      )}
+
+      {/* Быстрые кнопки — под питомцем */}
       <div className="quick-actions">
         <button className="quick-btn" onClick={() => setShowAchievements(true)}>
           🏆 Достижения
@@ -183,17 +194,6 @@ export default function ChildDashboard() {
           📊 Рейтинг
         </button>
       </div>
-
-      {/* Питомец */}
-      {data.pet && (
-        <div className="pet-area">
-          <PetScene pet={data.pet} onTap={handlePlay} onSwipeUp={handleFeed} />
-          <div className="pet-status-bar">
-            <span>{data.pet.name} · Ур. {data.pet.level}</span>
-            <span>😊 {data.pet.happiness}% · ⚡ {data.pet.energy}%</span>
-          </div>
-        </div>
-      )}
 
       {/* Табы: Задания / Учиться */}
       <div className="main-tabs">
