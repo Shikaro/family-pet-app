@@ -51,13 +51,31 @@ router.post("/:childId/buy", authMiddleware, (req: AuthRequest, res: Response) =
   child.coins -= accessory.cost;
   saveFamily(family);
 
+  // Снять другой предмет того же слота
+  for (const o of owned) {
+    const acc = PET_ACCESSORIES.find((a) => a.key === o.accessoryKey);
+    if (acc && acc.slot === accessory.slot && o.equipped) {
+      o.equipped = false;
+      updateOwnedAccessory(o);
+    }
+  }
+
+  // Купить и сразу поставить
   saveOwnedAccessory({
     id: crypto.randomUUID(),
     childId: child.id,
     accessoryKey,
     purchasedAt: new Date().toISOString(),
-    equipped: false,
+    equipped: true,
   });
+
+  // Обновить accessories у питомца
+  const pet = getPetByChildId(child.id);
+  if (pet) {
+    const allOwned = getOwnedAccessories(child.id);
+    pet.accessories = allOwned.filter((o) => o.equipped).map((o) => o.accessoryKey);
+    savePet(pet);
+  }
 
   res.json({ ok: true, coins: child.coins });
 });

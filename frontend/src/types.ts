@@ -26,6 +26,7 @@ export interface Pet {
   happiness: number;
   energy: number;
   mood: string;
+  accessories: string[];
 }
 
 export interface Task {
