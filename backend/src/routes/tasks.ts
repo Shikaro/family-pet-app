@@ -39,6 +39,8 @@ router.post("/init", authMiddleware, (req: AuthRequest, res: Response) => {
     reward: tpl.reward,
     isTemplate: true,
     isCustom: false,
+    daysOfWeek: null,
+    requirePhoto: false,
   }));
 
   saveTasks(tasks);
@@ -68,6 +70,10 @@ router.get("/", authMiddleware, (req: AuthRequest, res: Response) => {
   if (category && typeof category === "string") {
     tasks = tasks.filter((t) => t.category === category);
   }
+
+  // Фильтр по дню недели
+  const dayOfWeek = new Date().getDay(); // 0=Вс, 1=Пн...6=Сб
+  tasks = tasks.filter((t) => !t.daysOfWeek || t.daysOfWeek.includes(dayOfWeek));
 
   res.json(tasks);
 });
@@ -99,6 +105,8 @@ router.post("/", authMiddleware, (req: AuthRequest, res: Response) => {
     reward: reward || 3,
     isTemplate: false,
     isCustom: true,
+    daysOfWeek: req.body.daysOfWeek || null,
+    requirePhoto: req.body.requirePhoto || false,
   };
 
   saveTask(task);
@@ -129,18 +137,23 @@ router.post("/:id/complete", authMiddleware, (req: AuthRequest, res: Response) =
     return res.status(400).json({ error: "Это задание уже выполнено сегодня" });
   }
 
+  const { photoUrl } = req.body;
+
   const completion: TaskCompletion = {
     id: crypto.randomUUID(),
     taskId,
     childId,
     completedAt: new Date().toISOString(),
     confirmedByParent: false,
+    photoUrl: photoUrl || null,
+    photoStatus: photoUrl ? "pending" : null,
   };
 
   saveCompletion(completion);
 
   // Начисляем монеты и обновляем стрик
   child.coins += task.reward;
+  child.totalCompleted = (child.totalCompleted || 0) + 1;
   const today = todayStr();
   if (child.lastActiveDate !== today) {
     child.streakDays += 1;
