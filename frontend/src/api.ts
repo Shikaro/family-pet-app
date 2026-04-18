@@ -87,10 +87,10 @@ export async function getTasks(childId?: string, timeOfDay?: string) {
   return request<any[]>(`/tasks?${params}`);
 }
 
-export async function completeTask(taskId: string, childId: string) {
+export async function completeTask(taskId: string, childId: string, photoUrl?: string) {
   return request<any>(`/tasks/${taskId}/complete`, {
     method: "POST",
-    body: JSON.stringify({ childId }),
+    body: JSON.stringify({ childId, photoUrl }),
   });
 }
 
@@ -135,4 +135,53 @@ export async function redeemReward(rewardId: string, childId: string) {
     method: "POST",
     body: JSON.stringify({ childId }),
   });
+}
+
+// Achievements
+export async function getAchievements(childId: string) {
+  return request<any[]>(`/achievements/${childId}`);
+}
+
+export async function getRank(childId: string) {
+  return request<any>(`/achievements/${childId}/rank`);
+}
+
+export async function checkAchievements(childId: string) {
+  return request<any>(`/achievements/${childId}/check`, { method: "POST" });
+}
+
+// Accessories
+export async function getAccessoryCatalog() {
+  return request<any[]>("/accessories/catalog");
+}
+
+export async function getChildAccessories(childId: string) {
+  return request<any[]>(`/accessories/${childId}`);
+}
+
+export async function buyAccessory(childId: string, accessoryKey: string) {
+  return request<any>(`/accessories/${childId}/buy`, {
+    method: "POST",
+    body: JSON.stringify({ accessoryKey }),
+  });
+}
+
+export async function equipAccessory(childId: string, accessoryKey: string, equip: boolean) {
+  return request<any>(`/accessories/${childId}/equip`, {
+    method: "POST",
+    body: JSON.stringify({ accessoryKey, equip }),
+  });
+}
+
+// Challenges
+export async function getChallenges() {
+  return request<any[]>("/challenges");
+}
+
+export async function getChallengeProgress(childId: string) {
+  return request<any[]>(`/challenges/progress/${childId}`);
+}
+
+export async function getLeaderboard() {
+  return request<any[]>("/challenges/leaderboard");
 }

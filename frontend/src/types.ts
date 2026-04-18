@@ -13,6 +13,8 @@ export interface Child {
   coins: number;
   streakDays: number;
   lastActiveDate: string | null;
+  totalCompleted: number;
+  rankLevel: number;
 }
 
 export interface Pet {
@@ -39,6 +41,8 @@ export interface Task {
   reward: number;
   isTemplate: boolean;
   isCustom: boolean;
+  daysOfWeek: number[] | null;
+  requirePhoto: boolean;
 }
 
 export interface TaskCompletion {
@@ -47,6 +51,8 @@ export interface TaskCompletion {
   childId: string;
   completedAt: string;
   confirmedByParent: boolean;
+  photoUrl: string | null;
+  photoStatus: "pending" | "approved" | "rejected" | null;
 }
 
 export interface FamilyInfo {
@@ -72,6 +78,75 @@ export interface Reward {
   description: string;
   emoji: string;
   cost: number;
+}
+
+// === Ранги ===
+export interface ChildRank {
+  level: number;
+  title: string;
+  minTasks: number;
+  emoji: string;
+}
+
+export interface RankInfo {
+  rank: ChildRank;
+  nextRank: ChildRank | null;
+  totalCompleted: number;
+  progress: number;
+}
+
+// === Достижения ===
+export interface AchievementInfo {
+  id: string;
+  key: string;
+  title: string;
+  description: string;
+  emoji: string;
+  category: string;
+  unlocked: boolean;
+  unlockedAt: string | null;
+}
+
+// === Аксессуары ===
+export type AccessorySlot = "hat" | "glasses" | "background" | "collar" | "wings";
+
+export interface AccessoryInfo {
+  id: string;
+  key: string;
+  title: string;
+  emoji: string;
+  slot: AccessorySlot;
+  cost: number;
+  owned: boolean;
+  equipped: boolean;
+}
+
+// === Челленджи ===
+export interface ChallengeInfo {
+  id: string;
+  title: string;
+  description: string;
+  emoji: string;
+  type: string;
+  target: number;
+  bonusCoins: number;
+  weekStart: string;
+  weekEnd: string;
+  current: number;
+  completed: boolean;
+  completedAt: string | null;
+}
+
+// === Лидерборд ===
+export interface LeaderboardEntry {
+  id: string;
+  name: string;
+  gender: string;
+  avatarColor: string;
+  coins: number;
+  streakDays: number;
+  totalCompleted: number;
+  rankLevel: number;
 }
 
 export interface ParentDashboard {
