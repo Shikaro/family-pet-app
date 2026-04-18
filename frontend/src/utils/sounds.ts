@@ -1,37 +1,51 @@
 // Web Audio API sound effects — no external files needed
 
 let ctx: AudioContext | null = null;
+let unlocked = false;
 
 function getCtx(): AudioContext {
   if (!ctx) {
     ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
   }
-  // Resume if suspended (mobile browsers require user gesture)
-  if (ctx.state === "suspended") {
-    ctx.resume();
-  }
   return ctx;
 }
 
-// Resume audio on first user interaction (required for mobile)
-function ensureAudioReady() {
-  if (!ctx) return;
-  if (ctx.state === "suspended") ctx.resume();
+// Unlock audio on first user interaction (required for mobile/iOS)
+function unlockAudio() {
+  if (unlocked) return;
+  const c = getCtx();
+  if (c.state === "suspended") {
+    c.resume().then(() => {
+      unlocked = true;
+    });
+  } else {
+    unlocked = true;
+  }
+  // Play silent buffer to fully unlock on iOS
+  try {
+    const buf = c.createBuffer(1, 1, 22050);
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    src.connect(c.destination);
+    src.start(0);
+  } catch {}
 }
 
-// Attach global listener once
+// Attach global listeners
 if (typeof window !== "undefined") {
-  const resume = () => {
-    if (ctx && ctx.state === "suspended") ctx.resume();
-  };
-  document.addEventListener("touchstart", resume, { once: false, passive: true });
-  document.addEventListener("click", resume, { once: false, passive: true });
+  const events = ["touchstart", "touchend", "click", "keydown"];
+  events.forEach((evt) => {
+    document.addEventListener(evt, unlockAudio, { passive: true });
+  });
 }
 
 function playTone(freq: number, duration: number, type: OscillatorType = "sine", vol = 0.3) {
   try {
     const c = getCtx();
-    if (c.state === "suspended") return; // Can't play yet
+    // Try to resume if suspended (don't skip — queue the sound)
+    if (c.state === "suspended") {
+      c.resume();
+    }
     const osc = c.createOscillator();
     const gain = c.createGain();
     osc.type = type;
@@ -46,44 +60,46 @@ function playTone(freq: number, duration: number, type: OscillatorType = "sine",
 }
 
 export function playCoins() {
-  // Звон монеток — восходящие ноты
   [800, 1000, 1200, 1400].forEach((f, i) => {
     setTimeout(() => playTone(f, 0.15, "sine", 0.2), i * 80);
   });
 }
 
 export function playCorrect() {
-  // Правильный ответ — два восходящих тона
   playTone(523, 0.15, "sine", 0.25);
   setTimeout(() => playTone(784, 0.25, "sine", 0.25), 120);
 }
 
 export function playWrong() {
-  // Неправильный ответ — низкий буззер
   playTone(200, 0.3, "square", 0.15);
 }
 
 export function playPetHappy() {
-  // Питомец доволен — мелодичные ноты
   [660, 880, 1100].forEach((f, i) => {
     setTimeout(() => playTone(f, 0.12, "sine", 0.15), i * 100);
   });
 }
 
 export function playTap() {
-  // Лёгкий тап
   playTone(600, 0.08, "sine", 0.15);
 }
 
 export function playComplete() {
-  // Задание выполнено — фанфара
   const notes = [523, 659, 784, 1047];
   notes.forEach((f, i) => {
     setTimeout(() => playTone(f, 0.2, "sine", 0.2), i * 120);
   });
 }
 
-// Инициализация при первом вызове — создаём контекст заранее
+// Jingle for new achievement
+export function playAchievement() {
+  const notes = [523, 659, 784, 1047, 1319];
+  notes.forEach((f, i) => {
+    setTimeout(() => playTone(f, 0.25, "sine", 0.25), i * 150);
+  });
+}
+
 export function initSounds() {
   getCtx();
+  unlockAudio();
 }
