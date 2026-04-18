@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { Family, Pet, Task, TaskCompletion, Session, Reward } from "./types";
+import { Family, Pet, Task, TaskCompletion, Session, Reward, ChildAchievement, OwnedAccessory, WeeklyChallenge, ChallengeProgress } from "./types";
 
 const DATA_DIR = path.resolve(__dirname, "../data");
 
@@ -170,4 +170,75 @@ export function saveReward(reward: Reward) {
 export function deleteRewardById(id: string) {
   const rewards = getRewards().filter((r) => r.id !== id);
   writeJSON("rewards", rewards);
+}
+
+// === Achievements ===
+
+export function getChildAchievements(childId: string): ChildAchievement[] {
+  return readJSON<ChildAchievement>("achievements", []).filter((a) => a.childId === childId);
+}
+
+export function saveChildAchievement(achievement: ChildAchievement) {
+  const all = readJSON<ChildAchievement>("achievements", []);
+  all.push(achievement);
+  writeJSON("achievements", all);
+}
+
+export function hasAchievement(childId: string, key: string): boolean {
+  return getChildAchievements(childId).some((a) => a.achievementKey === key);
+}
+
+// === Owned Accessories ===
+
+export function getOwnedAccessories(childId: string): OwnedAccessory[] {
+  return readJSON<OwnedAccessory>("accessories", []).filter((a) => a.childId === childId);
+}
+
+export function saveOwnedAccessory(acc: OwnedAccessory) {
+  const all = readJSON<OwnedAccessory>("accessories", []);
+  all.push(acc);
+  writeJSON("accessories", all);
+}
+
+export function updateOwnedAccessory(acc: OwnedAccessory) {
+  const all = readJSON<OwnedAccessory>("accessories", []);
+  const idx = all.findIndex((a) => a.id === acc.id);
+  if (idx >= 0) all[idx] = acc;
+  writeJSON("accessories", all);
+}
+
+export function getEquippedAccessories(childId: string): OwnedAccessory[] {
+  return getOwnedAccessories(childId).filter((a) => a.equipped);
+}
+
+// === Weekly Challenges ===
+
+export function getWeeklyChallenges(familyId: string): WeeklyChallenge[] {
+  return readJSON<WeeklyChallenge>("challenges", []).filter((c) => c.familyId === familyId);
+}
+
+export function saveWeeklyChallenge(challenge: WeeklyChallenge) {
+  const all = readJSON<WeeklyChallenge>("challenges", []);
+  all.push(challenge);
+  writeJSON("challenges", all);
+}
+
+export function getChallengeProgress(challengeId: string, childId: string): ChallengeProgress | undefined {
+  return readJSON<ChallengeProgress>("challenge_progress", [])
+    .find((p) => p.challengeId === challengeId && p.childId === childId);
+}
+
+export function getAllChallengeProgress(childId: string): ChallengeProgress[] {
+  return readJSON<ChallengeProgress>("challenge_progress", []).filter((p) => p.childId === childId);
+}
+
+export function saveChallengeProgress(progress: ChallengeProgress) {
+  const all = readJSON<ChallengeProgress>("challenge_progress", []);
+  const idx = all.findIndex((p) => p.id === progress.id);
+  if (idx >= 0) {
+    all[idx] = progress;
+  } else {
+    all.push(progress);
+  }
+  writeJSON("challenge_progress", all);
 }
