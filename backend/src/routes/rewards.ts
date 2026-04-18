@@ -3,13 +3,34 @@ import { getRewardsByFamily, saveReward, saveFamily, deleteRewardById } from "..
 import { authMiddleware, AuthRequest } from "../auth";
 import { Reward } from "../types";
 import crypto from "crypto";
+import { rewardTemplates } from "../data/reward-templates";
 
 const router = Router();
+
+// Инициализация стандартных наград при первом запросе
+function ensureDefaultRewards(familyId: string): Reward[] {
+  let rewards = getRewardsByFamily(familyId);
+  if (rewards.length === 0) {
+    rewards = rewardTemplates.map((tpl) => {
+      const reward: Reward = {
+        id: crypto.randomUUID(),
+        familyId,
+        title: tpl.title,
+        description: tpl.description,
+        emoji: tpl.emoji,
+        cost: tpl.cost,
+      };
+      saveReward(reward);
+      return reward;
+    });
+  }
+  return rewards;
+}
 
 // GET /api/rewards — список наград семьи
 router.get("/", authMiddleware, (req: AuthRequest, res: Response) => {
   const family = req.family!;
-  const rewards = getRewardsByFamily(family.id);
+  const rewards = ensureDefaultRewards(family.id);
   res.json(rewards);
 });
 
