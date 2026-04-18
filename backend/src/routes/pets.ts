@@ -45,6 +45,33 @@ router.post("/choose", authMiddleware, (req: AuthRequest, res: Response) => {
   res.json(pet);
 });
 
+// PUT /api/pets/:childId — редактировать питомца (тип, имя)
+router.put("/:childId", authMiddleware, (req: AuthRequest, res: Response) => {
+  const pet = getPetByChildId(req.params.childId);
+  if (!pet) {
+    return res.status(404).json({ error: "Питомец не найден" });
+  }
+
+  const { type, name } = req.body;
+
+  if (type !== undefined) {
+    if (!VALID_TYPES.includes(type)) {
+      return res.status(400).json({ error: "Неизвестный тип питомца" });
+    }
+    pet.type = type;
+  }
+
+  if (name !== undefined) {
+    if (!name || name.trim().length === 0) {
+      return res.status(400).json({ error: "Имя не может быть пустым" });
+    }
+    pet.name = name.trim();
+  }
+
+  savePet(pet);
+  res.json(pet);
+});
+
 // GET /api/pets/:childId — статус питомца
 router.get("/:childId", authMiddleware, (req: AuthRequest, res: Response) => {
   const pet = getPetByChildId(req.params.childId);

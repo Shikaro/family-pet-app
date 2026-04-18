@@ -1176,6 +1176,84 @@ input, select {
   transition: width 0.4s;
 }
 
+/* Pet edit panel */
+.pet-edit-panel {
+  margin: 12px 16px;
+  padding: 16px;
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.pet-edit-panel h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+.pet-type-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.pet-type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pet-type-btn.active {
+  border-color: var(--blue);
+  background: rgba(59, 130, 246, 0.08);
+  transform: scale(1.05);
+}
+.pet-type-emoji { font-size: 1.8rem; }
+.pet-type-label { font-size: 0.65rem; font-weight: 600; color: var(--text-light); }
+.pet-name-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+.pet-name-input:focus {
+  border-color: var(--blue);
+  outline: none;
+}
+.pet-edit-actions {
+  display: flex;
+  gap: 8px;
+}
+.pet-save-btn {
+  flex: 1;
+  padding: 10px;
+  background: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.pet-cancel-btn {
+  flex: 1;
+  padding: 10px;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .parent-time-section {
   padding: 0 16px;
   margin-bottom: 20px;

@@ -67,6 +67,13 @@ export async function getPet(childId: string) {
   return request<any>(`/pets/${childId}`);
 }
 
+export async function updatePet(childId: string, data: { type?: string; name?: string }) {
+  return request<any>(`/pets/${childId}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+}
+
 export async function feedPet(childId: string) {
   return request<any>(`/pets/${childId}/feed`, { method: "POST" });
 }

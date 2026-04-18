@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useProfile } from "../context/ProfileContext";
-import { getParentDashboard, getRewards, createReward, deleteReward, updateReward } from "../api";
+import { getParentDashboard, getRewards, createReward, deleteReward, updateReward, updatePet } from "../api";
 import { Child, Pet, Task, TaskCompletion, Reward } from "../types";
 
 interface ChildStat {
@@ -36,6 +36,9 @@ export default function ParentDashboard() {
   const [parentTab, setParentTab] = useState<"children" | "rewards">("children");
   const [editingRewardId, setEditingRewardId] = useState<string | null>(null);
   const [editCost, setEditCost] = useState("");
+  const [editingPet, setEditingPet] = useState<string | null>(null); // childId
+  const [editPetType, setEditPetType] = useState("");
+  const [editPetName, setEditPetName] = useState("");
 
   const load = async () => {
     try {
@@ -85,6 +88,21 @@ export default function ParentDashboard() {
     } catch {}
   };
 
+  const startEditPet = (childId: string, pet: Pet) => {
+    setEditingPet(childId);
+    setEditPetType(pet.type);
+    setEditPetName(pet.name);
+  };
+
+  const handleSavePet = async () => {
+    if (!editingPet || !editPetName.trim()) return;
+    try {
+      await updatePet(editingPet, { type: editPetType, name: editPetName.trim() });
+      setEditingPet(null);
+      await load();
+    } catch {}
+  };
+
   if (!family) return null;
   if (loading) return <div className="loading-screen">⏳</div>;
 
@@ -125,9 +143,9 @@ export default function ParentDashboard() {
             <span className="summary-label">Сегодня</span>
           </div>
           {selected.pet && (
-            <div className="summary-card">
+            <div className="summary-card" onClick={() => startEditPet(selected.child.id, selected.pet!)} style={{ cursor: "pointer" }}>
               <span className="summary-num">{PET_EMOJIS[selected.pet.type] || "🐾"}</span>
-              <span className="summary-label">{selected.pet.name} Ур.{selected.pet.level}</span>
+              <span className="summary-label">{selected.pet.name} ✏️</span>
             </div>
           )}
         </div>
@@ -141,6 +159,39 @@ export default function ParentDashboard() {
             />
           </div>
         </div>
+
+        {/* Редактирование питомца */}
+        {editingPet === selected.child.id && (
+          <div className="pet-edit-panel">
+            <h3>Редактировать питомца</h3>
+            <div className="pet-type-grid">
+              {(Object.entries(PET_EMOJIS) as [string, string][]).map(([type, emoji]) => (
+                <button
+                  key={type}
+                  className={`pet-type-btn ${editPetType === type ? "active" : ""}`}
+                  onClick={() => setEditPetType(type)}
+                >
+                  <span className="pet-type-emoji">{emoji}</span>
+                  <span className="pet-type-label">
+                    {type === "cat" ? "Котёнок" : type === "dog" ? "Щенок" : type === "hamster" ? "Хомячок" : type === "parrot" ? "Попугай" : type === "rabbit" ? "Кролик" : type === "turtle" ? "Черепашка" : "Динозаврик"}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <input
+              type="text"
+              className="pet-name-input"
+              placeholder="Имя питомца"
+              value={editPetName}
+              onChange={(e) => setEditPetName(e.target.value)}
+              maxLength={20}
+            />
+            <div className="pet-edit-actions">
+              <button className="pet-save-btn" onClick={handleSavePet}>Сохранить</button>
+              <button className="pet-cancel-btn" onClick={() => setEditingPet(null)}>Отмена</button>
+            </div>
+          </div>
+        )}
 
         {/* Задания по времени дня */}
         {["morning", "afternoon", "evening", "anytime"].map((time) => {
