@@ -51,10 +51,11 @@ router.put("/:id", authMiddleware, (req: AuthRequest, res: Response) => {
     return res.status(404).json({ error: "Ребёнок не найден" });
   }
 
-  const { name, age, gender } = req.body;
+  const { name, age, gender, coins } = req.body;
   if (name) child.name = name;
   if (age) child.age = parseInt(age);
   if (gender) child.gender = gender;
+  if (coins !== undefined) child.coins = Number(coins);
 
   saveFamily(family);
   res.json(child);
