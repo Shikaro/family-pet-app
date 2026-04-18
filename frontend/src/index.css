@@ -518,7 +518,7 @@ input, select {
 
 .ps-scene {
   position: relative;
-  height: 220px;
+  height: 250px;
   overflow: hidden;
   user-select: none;
   border-radius: 0 0 16px 16px;
@@ -548,65 +548,70 @@ input, select {
   70% { transform: translateY(5px) translateX(-5px); }
 }
 
-/* Земля */
+/* Земля — плавный градиент, не полоса */
 .ps-ground {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 48px;
+  height: 65px;
   z-index: 1;
+  border-radius: 0;
+  opacity: 0.85;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 40%);
 }
 
-/* Растения на заднем плане */
+/* Растения на заднем плане — крупнее */
 .ps-plant {
   position: absolute;
-  bottom: 40px;
+  bottom: 48px;
   z-index: 0;
-  opacity: 0.7;
+  opacity: 0.6;
 }
-.ps-svg-plant { width: 35px; height: auto; }
-.ps-plant-1 { left: 5%; }
-.ps-plant-2 { right: 8%; }
+.ps-svg-plant { width: 50px; height: auto; }
+.ps-plant-1 { left: 2%; }
+.ps-plant-2 { right: 4%; }
 
-/* Домик — крупный, справа на заднем плане */
+/* Домик — БОЛЬШОЙ, часть пейзажа */
 .ps-house-wrap {
   position: absolute;
-  right: 3%;
-  bottom: 38px;
+  right: -2%;
+  bottom: 30px;
   z-index: 1;
+  opacity: 0.9;
 }
-.ps-svg-house { width: 72px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
-.ps-svg-house-small { width: 55px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+.ps-svg-house { width: 140px; height: auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)); }
+.ps-svg-house-small { width: 110px; height: auto; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25)); }
 
-/* Предметы на земле */
+/* Предметы на земле — крупные, на переднем плане */
 .ps-scene-bed {
   position: absolute;
-  left: 5%;
-  bottom: 32px;
-  z-index: 1;
+  left: 2%;
+  bottom: 28px;
+  z-index: 2;
 }
 .ps-scene-bowl {
   position: absolute;
-  left: 30%;
-  bottom: 34px;
-  z-index: 1;
+  left: 22%;
+  bottom: 24px;
+  z-index: 2;
 }
 .ps-scene-toy {
   position: absolute;
-  right: 28%;
-  bottom: 36px;
+  right: 32%;
+  bottom: 30px;
   z-index: 1;
 }
 
-.ps-svg-ground { width: 48px; height: auto; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.15)); }
-.ps-svg-ground-sm { width: 32px; height: auto; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.12)); }
+.ps-svg-ground { width: 72px; height: auto; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); }
+.ps-svg-ground-sm { width: 48px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
 
 /* === Обёртка питомца === */
 .ps-pet-wrap {
   position: absolute;
-  bottom: 40px;
-  z-index: 2;
+  bottom: 45px;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
