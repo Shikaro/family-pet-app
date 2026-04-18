@@ -35,6 +35,7 @@ router.post("/choose", authMiddleware, (req: AuthRequest, res: Response) => {
     happiness: 70,
     energy: 80,
     mood: "happy",
+    accessories: [],
   };
 
   savePet(pet);

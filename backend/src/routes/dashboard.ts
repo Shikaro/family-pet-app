@@ -25,8 +25,9 @@ router.get("/child/:childId", authMiddleware, (req: AuthRequest, res: Response) 
 
   const allTasks = getTasksByFamily(family.id);
   const group = ageToGroup(child.age);
+  const dayOfWeek = new Date().getDay();
   const tasks = allTasks.filter(
-    (t) => t.ageGroup === group && (t.childId === null || t.childId === child.id)
+    (t) => t.ageGroup === group && (t.childId === null || t.childId === child.id) && (!t.daysOfWeek || t.daysOfWeek.includes(dayOfWeek))
   );
 
   const completedToday = getCompletionsByChild(child.id, todayStr());
