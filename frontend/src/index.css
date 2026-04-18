@@ -533,8 +533,8 @@ input, select {
 }
 .ps-deco {
   position: absolute;
-  font-size: 1.4rem;
-  opacity: 0.5;
+  font-size: 1rem;
+  opacity: 0.35;
   animation: psFloat 7s ease-in-out infinite;
 }
 .ps-d0 { top: 14px; left: 8%;  animation-delay: 0s; }
@@ -703,37 +703,27 @@ input, select {
   animation: psPopIn 0.2s ease;
 }
 
-/* Предметы на сцене */
-.ps-item {
-  position: absolute;
-  z-index: 1;
-  pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+/* Полка предметов — аккуратный ряд под сценой */
+.ps-items-shelf {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.03) 0%, transparent 100%);
 }
-.ps-item-house {
-  font-size: 2.4rem;
-  bottom: 44px;
-  right: 10%;
+.ps-shelf-item {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  backdrop-filter: blur(4px);
 }
-.ps-item-toy {
-  font-size: 1.4rem;
-  bottom: 48px;
-  left: 15%;
-  animation: psToyBounce 3s ease-in-out infinite;
-}
-.ps-item-bowl {
-  font-size: 1.5rem;
-  bottom: 44px;
-  left: 30%;
-}
-.ps-item-bed {
+.ps-shelf-emoji {
   font-size: 1.6rem;
-  bottom: 44px;
-  right: 28%;
-}
-@keyframes psToyBounce {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-4px) rotate(5deg); }
 }
 
 /* Речевой пузырь — вне scaleX(-1), всегда читаемый */

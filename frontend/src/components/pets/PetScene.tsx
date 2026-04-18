@@ -183,10 +183,19 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
 
   const isFlipped = direction === "left";
 
+  // Собираем предметы для полки
+  const sceneItems: { emoji: string; key: string }[] = [];
+  if (houseKey) sceneItems.push({ emoji: ITEM_EMOJIS[houseKey], key: "house" });
+  if (bowlKey) sceneItems.push({ emoji: ITEM_EMOJIS[bowlKey], key: "bowl" });
+  if (bedKey) sceneItems.push({ emoji: ITEM_EMOJIS[bedKey], key: "bed" });
+  if (toyKey) sceneItems.push({ emoji: ITEM_EMOJIS[toyKey], key: "toy" });
+
+  const hasCustomBg = !!bgKey;
+
   return (
     <div className="ps-wrapper">
       <div className="ps-scene" style={{ background: bgStyle.bg }}>
-        {/* Фоновые декорации */}
+        {/* Фоновые декорации — мелкие, полупрозрачные */}
         <div className="ps-bg-layer">
           {bgStyle.extras.map((e, i) => (
             <span key={i} className={`ps-deco ps-d${i}`}>{e}</span>
@@ -195,16 +204,14 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
 
         {/* Земля */}
         <div className="ps-ground" style={{ backgroundColor: bgStyle.ground }}>
-          <span className="ps-grass g1">🌱</span>
-          <span className="ps-grass g2">🌱</span>
-          <span className="ps-grass g3">🌿</span>
+          {!hasCustomBg && (
+            <>
+              <span className="ps-grass g1">🌱</span>
+              <span className="ps-grass g2">🌱</span>
+              <span className="ps-grass g3">🌿</span>
+            </>
+          )}
         </div>
-
-        {/* Предметы на сцене — домик, миска, лежанка */}
-        {houseKey && <span className="ps-item ps-item-house">{ITEM_EMOJIS[houseKey]}</span>}
-        {bowlKey && <span className="ps-item ps-item-bowl">{ITEM_EMOJIS[bowlKey]}</span>}
-        {bedKey && <span className="ps-item ps-item-bed">{ITEM_EMOJIS[bedKey]}</span>}
-        {toyKey && <span className="ps-item ps-item-toy">{ITEM_EMOJIS[toyKey]}</span>}
 
         {/* === ПИТОМЕЦ === */}
         <div
@@ -255,7 +262,18 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
         )}
       </div>
 
-      {/* Кнопки взаимодействия — ПОД сценой */}
+      {/* Предметы — аккуратная полка под сценой */}
+      {sceneItems.length > 0 && (
+        <div className="ps-items-shelf">
+          {sceneItems.map((item) => (
+            <div key={item.key} className="ps-shelf-item">
+              <span className="ps-shelf-emoji">{item.emoji}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Кнопки взаимодействия */}
       <div className="ps-actions">
         <button className="ps-action-btn ps-play-btn" onClick={handlePlay}>
           <span className="ps-action-icon">🎾</span>
