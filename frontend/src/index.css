@@ -557,15 +557,50 @@ input, select {
   height: 48px;
   z-index: 1;
 }
-.ps-grass {
+
+/* Растения на заднем плане */
+.ps-plant {
   position: absolute;
-  bottom: 8px;
-  font-size: 0.9rem;
-  opacity: 0.6;
+  bottom: 40px;
+  z-index: 0;
+  opacity: 0.7;
 }
-.ps-grass.g1 { left: 12%; }
-.ps-grass.g2 { left: 55%; }
-.ps-grass.g3 { right: 18%; }
+.ps-svg-plant { width: 35px; height: auto; }
+.ps-plant-1 { left: 5%; }
+.ps-plant-2 { right: 8%; }
+
+/* Домик — крупный, справа на заднем плане */
+.ps-house-wrap {
+  position: absolute;
+  right: 3%;
+  bottom: 38px;
+  z-index: 1;
+}
+.ps-svg-house { width: 72px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+.ps-svg-house-small { width: 55px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+
+/* Предметы на земле */
+.ps-scene-bed {
+  position: absolute;
+  left: 5%;
+  bottom: 32px;
+  z-index: 1;
+}
+.ps-scene-bowl {
+  position: absolute;
+  left: 30%;
+  bottom: 34px;
+  z-index: 1;
+}
+.ps-scene-toy {
+  position: absolute;
+  right: 28%;
+  bottom: 36px;
+  z-index: 1;
+}
+
+.ps-svg-ground { width: 48px; height: auto; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.15)); }
+.ps-svg-ground-sm { width: 32px; height: auto; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.12)); }
 
 /* === Обёртка питомца === */
 .ps-pet-wrap {
@@ -703,46 +738,7 @@ input, select {
   animation: psPopIn 0.2s ease;
 }
 
-/* Домик — крупный, на заднем плане */
-.ps-house {
-  position: absolute;
-  right: 4%;
-  bottom: 36px;
-  z-index: 1;
-  pointer-events: none;
-  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
-}
-.ps-house-emoji {
-  font-size: 3.5rem;
-  display: block;
-}
-
-/* Предметы на земле */
-.ps-ground-item {
-  position: absolute;
-  pointer-events: none;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
-}
-.ps-bed {
-  font-size: 2rem;
-  left: 6%;
-  bottom: 2px;
-}
-.ps-bowl {
-  font-size: 1.6rem;
-  left: 32%;
-  bottom: 2px;
-}
-.ps-toy {
-  font-size: 1.3rem;
-  right: 30%;
-  bottom: 4px;
-  animation: psToyIdle 4s ease-in-out infinite;
-}
-@keyframes psToyIdle {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(8deg); }
-}
+/* (старые стили предметов удалены — теперь SVG) */
 
 /* Речевой пузырь — вне scaleX(-1), всегда читаемый */
 .ps-bubble {
