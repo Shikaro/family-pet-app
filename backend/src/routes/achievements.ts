@@ -1,9 +1,8 @@
 import { Router, Response } from "express";
 import { authMiddleware, AuthRequest } from "../auth";
-import { getChildAchievements, saveChildAchievement, hasAchievement, getCompletionsByChild, getPetByChildId } from "../storage";
+import { getChildAchievements, saveChildAchievement, hasAchievement, getPetByChildId } from "../storage";
 import { ACHIEVEMENTS } from "../data/achievements";
-import { getRankForTasks } from "../data/ranks";
-import { RANKS } from "../data/ranks";
+import { getRankForTasks, RANKS } from "../data/ranks";
 import crypto from "crypto";
 
 const router = Router();
