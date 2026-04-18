@@ -703,28 +703,19 @@ input, select {
   animation: psPopIn 0.2s ease;
 }
 
-/* Полка предметов — аккуратный ряд под сценой */
-.ps-items-shelf {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  padding: 6px 16px;
-  background: linear-gradient(180deg, rgba(0,0,0,0.03) 0%, transparent 100%);
+/* Предметы на сцене — на земле, как декорации */
+.ps-item {
+  position: absolute;
+  font-size: 1.4rem;
+  z-index: 1;
+  pointer-events: none;
+  bottom: 44px;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12));
 }
-.ps-shelf-item {
-  width: 48px;
-  height: 48px;
-  background: rgba(255,255,255,0.7);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  backdrop-filter: blur(4px);
-}
-.ps-shelf-emoji {
-  font-size: 1.6rem;
-}
+.ps-pos-left { left: 8%; }
+.ps-pos-right { right: 8%; }
+.ps-pos-center-left { left: 26%; }
+.ps-pos-center-right { right: 26%; }
 
 /* Речевой пузырь — вне scaleX(-1), всегда читаемый */
 .ps-bubble {
