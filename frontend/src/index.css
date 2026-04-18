@@ -507,13 +507,13 @@ input, select {
 }
 
 /* Pet area */
-.pet-area {
-  margin: 0;
-}
+/* ===== PET SCENE (Duolingo-inspired) ===== */
 
-.pet-scene {
+.pet-area { margin: 0; }
+
+.ps-scene {
   position: relative;
-  height: 240px;
+  height: 280px;
   overflow: hidden;
   cursor: pointer;
   user-select: none;
@@ -521,247 +521,310 @@ input, select {
   border-radius: 0 0 24px 24px;
 }
 
-.pet-scene-bg {
+/* Фоновые декорации */
+.ps-bg-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 0;
 }
-
-.scene-deco {
+.ps-deco {
   position: absolute;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   opacity: 0.5;
-  animation: floatDeco 8s ease-in-out infinite;
+  animation: psFloat 7s ease-in-out infinite;
 }
-.d0 { top: 12px; left: 10%; animation-delay: 0s; }
-.d1 { top: 24px; right: 15%; animation-delay: 2s; }
-.d2 { top: 8px; left: 55%; animation-delay: 4s; font-size: 0.9rem; }
-.d3 { top: 30px; right: 40%; animation-delay: 6s; font-size: 0.8rem; }
+.ps-d0 { top: 14px; left: 8%;  animation-delay: 0s; }
+.ps-d1 { top: 28px; right: 12%; animation-delay: 1.8s; }
+.ps-d2 { top: 10px; left: 52%; animation-delay: 3.6s; font-size: 1rem; }
+.ps-d3 { top: 36px; right: 38%; animation-delay: 5.4s; font-size: 1rem; }
 
-@keyframes floatDeco {
+@keyframes psFloat {
   0%, 100% { transform: translateY(0) translateX(0); }
-  25% { transform: translateY(-6px) translateX(4px); }
-  75% { transform: translateY(4px) translateX(-4px); }
+  30% { transform: translateY(-8px) translateX(5px); }
+  70% { transform: translateY(5px) translateX(-5px); }
 }
 
 /* Земля */
-.pet-ground {
+.ps-ground {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 40px;
-  border-radius: 0;
+  height: 48px;
   z-index: 1;
 }
-
-/* Обёртка питомца — двигается по экрану */
-.pet-character-wrap {
+.ps-grass {
   position: absolute;
-  bottom: 32px;
+  bottom: 8px;
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+.ps-grass.g1 { left: 12%; }
+.ps-grass.g2 { left: 55%; }
+.ps-grass.g3 { right: 18%; }
+
+/* === Обёртка питомца === */
+.ps-pet-wrap {
+  position: absolute;
+  bottom: 40px;
   z-index: 2;
-  transition: left 1s ease-in-out;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: left 0.08s linear;
 }
 
-/* Тело питомца */
-.pet-body {
-  font-size: 4.5rem;
-  line-height: 1;
+/* Тень */
+.ps-shadow {
+  width: 70px;
+  height: 14px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+.ps-shadow.ps-jump {
+  animation: psShadowJump 0.7s ease;
+}
+@keyframes psShadowJump {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  40% { transform: translateX(-50%) scale(0.5); opacity: 0.3; }
+}
+
+/* Тело + аксессуары */
+.ps-pet-body-wrap {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.pet-emoji {
+/* Эмодзи питомца — КРУПНЫЙ */
+.ps-pet {
+  position: relative;
+  z-index: 2;
+}
+.ps-emoji {
   display: block;
+  font-size: 6.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
 }
 
-/* Анимации */
-.pet-idle {
-  animation: petIdle 3s ease-in-out infinite;
+/* === Анимации === */
+.ps-breathe {
+  animation: psBreathe 3s ease-in-out infinite;
 }
-.pet-walking {
-  animation: petWalk 0.4s ease-in-out infinite;
+.ps-walk {
+  animation: psWalk 0.35s ease-in-out infinite;
 }
-.pet-jumping {
-  animation: petJump 0.5s ease;
+.ps-jump {
+  animation: psJump 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.pet-sniffing {
-  animation: petSniff 0.6s ease-in-out infinite;
+.ps-wiggle {
+  animation: psWiggle 0.5s ease-in-out infinite;
 }
-.pet-sleeping {
-  animation: petSleep 2s ease-in-out infinite;
-  opacity: 0.7;
+.ps-sleep {
+  animation: psSleep 2.5s ease-in-out infinite;
+  opacity: 0.75;
 }
-.bounce {
-  animation: petBounce 0.5s ease !important;
-}
-.feed {
-  animation: petFeed 0.5s ease !important;
+.ps-celebrate {
+  animation: psCelebrate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes petIdle {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+@keyframes psBreathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.03); }
 }
-
-@keyframes petWalk {
+@keyframes psWalk {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-4px) rotate(-3deg); }
-  75% { transform: translateY(-4px) rotate(3deg); }
+  25% { transform: translateY(-6px) rotate(-4deg); }
+  75% { transform: translateY(-6px) rotate(4deg); }
 }
-
-@keyframes petJump {
+@keyframes psJump {
   0% { transform: translateY(0) scale(1); }
-  40% { transform: translateY(-30px) scale(1.1); }
+  35% { transform: translateY(-40px) scale(1.12); }
+  65% { transform: translateY(-40px) scale(1.12); }
   100% { transform: translateY(0) scale(1); }
 }
-
-@keyframes petSniff {
+@keyframes psWiggle {
   0%, 100% { transform: rotate(0deg); }
-  30% { transform: rotate(-8deg) translateX(-2px); }
-  60% { transform: rotate(8deg) translateX(2px); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-6deg); }
+  80% { transform: rotate(6deg); }
 }
-
-@keyframes petSleep {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(2px) scale(0.98); }
+@keyframes psSleep {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+  50% { transform: translateY(3px) scale(0.97) rotate(-2deg); }
 }
-
-@keyframes petBounce {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.3) rotate(-5deg); }
-  60% { transform: scale(0.9) rotate(5deg); }
+@keyframes psCelebrate {
+  0% { transform: scale(1) rotate(0); }
+  25% { transform: scale(1.2) rotate(-8deg); }
+  50% { transform: scale(1.15) rotate(8deg); }
+  75% { transform: scale(1.2) rotate(-4deg); }
   100% { transform: scale(1) rotate(0); }
 }
 
-@keyframes petFeed {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2) translateY(-10px); }
-  100% { transform: scale(1); }
+/* Моргание */
+.ps-blink-overlay {
+  position: absolute;
+  top: 28%;
+  left: 20%;
+  right: 20%;
+  height: 18%;
+  background: rgba(0,0,0,0.06);
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: none;
+  animation: psBlink 0.15s ease;
+}
+@keyframes psBlink {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
-/* Аксессуары */
-.acc-hat {
+.ps-squint-overlay {
   position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.8rem;
-  z-index: 5;
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
-}
-
-.acc-glasses {
-  position: absolute;
-  top: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.3rem;
-  z-index: 5;
-}
-
-.acc-collar {
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.2rem;
-  z-index: 5;
-}
-
-.acc-wings {
-  position: absolute;
-  top: 10px;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
   font-size: 2rem;
-  z-index: 0;
-  opacity: 0.7;
-  animation: wingFlap 2s ease-in-out infinite;
+  z-index: 3;
+  pointer-events: none;
+  animation: psPopIn 0.2s ease;
 }
 
-@keyframes wingFlap {
-  0%, 100% { transform: translateX(-50%) scaleX(1); }
-  50% { transform: translateX(-50%) scaleX(1.15); }
-}
-
-/* Речевой пузырь */
-.pet-speech {
+/* Аксессуары */
+.ps-acc {
   position: absolute;
-  top: -40px;
+  z-index: 5;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+.ps-hat {
+  top: -22px;
   left: 50%;
   transform: translateX(-50%);
-  background: white;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  animation: popIn 0.2s ease;
-  z-index: 10;
+  font-size: 2.2rem;
 }
-.pet-speech::after {
-  content: "";
-  position: absolute;
+.ps-glasses {
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.6rem;
+}
+.ps-collar {
   bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid white;
+  font-size: 1.4rem;
+}
+.ps-wings {
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+  z-index: 0;
+  opacity: 0.7;
+  animation: psWingFlap 2s ease-in-out infinite;
+}
+@keyframes psWingFlap {
+  0%, 100% { transform: translateX(-50%) scaleX(1); }
+  50% { transform: translateX(-50%) scaleX(1.2); }
 }
 
-/* Пузырь настроения */
-.pet-mood-bubble {
+/* Речевой пузырь */
+.ps-bubble {
+  position: absolute;
+  top: -44px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+  animation: psPopIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10;
+}
+.ps-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 7px solid white;
+}
+@keyframes psPopIn {
+  0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+/* Настроение */
+.ps-mood {
   position: absolute;
   top: 12px;
   right: 12px;
-  font-size: 1.5rem;
-  background: var(--card);
+  font-size: 1.6rem;
+  background: rgba(255,255,255,0.85);
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   z-index: 5;
+  backdrop-filter: blur(4px);
 }
 
 /* Частицы */
-.pet-particles {
+.ps-particles {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 6;
 }
-.particle {
+.ps-p {
   position: absolute;
-  font-size: 1.5rem;
-  animation: particleUp 0.8s ease-out forwards;
+  font-size: 1.8rem;
+  animation: psPUp 1s ease-out forwards;
 }
-.p0 { left: 30%; top: 40%; }
-.p1 { left: 50%; top: 35%; animation-delay: 0.1s; }
-.p2 { left: 65%; top: 45%; animation-delay: 0.2s; }
+.ps-p0 { left: 20%; top: 35%; }
+.ps-p1 { left: 40%; top: 30%; animation-delay: 0.08s; }
+.ps-p2 { left: 60%; top: 38%; animation-delay: 0.16s; }
+.ps-p3 { left: 75%; top: 32%; animation-delay: 0.24s; }
+.ps-p4 { left: 35%; top: 42%; animation-delay: 0.32s; }
 
-@keyframes particleUp {
-  0% { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-60px) scale(1.5); }
+@keyframes psPUp {
+  0% { opacity: 1; transform: translateY(0) scale(0.8); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-80px) scale(1.4) rotate(20deg); }
 }
 
-.pet-hint {
+/* Подсказка */
+.ps-hint {
   position: absolute;
-  bottom: 44px;
+  bottom: 52px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.7rem;
-  color: rgba(0,0,0,0.25);
+  color: rgba(0,0,0,0.2);
   white-space: nowrap;
   z-index: 5;
 }
+
+/* ===== END PET SCENE ===== */
 
 .pet-status-bar {
   display: flex;
