@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Pet } from "../../types";
 import { playTap, playPetHappy } from "../../utils/sounds";
 
-// Крупные эмодзи-модели питомцев
 const PET_EMOJIS: Record<string, string> = {
   cat: "🐱", dog: "🐶", hamster: "🐹", parrot: "🦜",
   rabbit: "🐰", turtle: "🐢", dino: "🦕",
@@ -12,7 +11,6 @@ const MOOD_FACES: Record<string, string> = {
   happy: "😊", neutral: "😐", sad: "😢", hungry: "😋", sleepy: "😴",
 };
 
-// Фразы по настроениям — более разнообразные
 const SPEECH: Record<string, string[]> = {
   happy: ["Ура!", "Играем!", "🎵", "Люблю!", "Хи-хи!", "Ла-ла-ла!", "Я счастлив!", "Обнимашки!"],
   neutral: ["Хм...", "Мур~", "О!", "Ну-ну...", "Эхе-хе"],
@@ -21,7 +19,6 @@ const SPEECH: Record<string, string[]> = {
   sleepy: ["Zzz...", "Хрр...", "Спать...", "💤", "Зевает~"],
 };
 
-// Фоны-аксессуары
 const BG_STYLES: Record<string, { bg: string; ground: string; extras: string[] }> = {
   bg_space: { bg: "linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%)", ground: "#1a1a2e", extras: ["⭐", "🌙", "✨", "🪐"] },
   bg_forest: { bg: "linear-gradient(180deg, #2d5016 0%, #4a7c23 50%, #6b8f3c 100%)", ground: "#3d6b1e", extras: ["🌲", "🌿", "🍄", "🦋"] },
@@ -58,9 +55,8 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
   const [speechBubble, setSpeechBubble] = useState("");
   const [eyeState, setEyeState] = useState<"open" | "blink" | "squint">("open");
   const [tapScale, setTapScale] = useState(1);
-  const touchStartY = useRef(0);
 
-  // Моргание — случайное, как Duolingo
+  // Моргание
   useEffect(() => {
     const blink = () => {
       setEyeState("blink");
@@ -72,7 +68,7 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
     return () => clearInterval(id);
   }, []);
 
-  // Случайные действия — более разнообразные
+  // Случайные действия
   useEffect(() => {
     const doAction = () => {
       const mood = pet.mood;
@@ -104,7 +100,6 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
         setTimeout(() => setAction("idle"), 700);
       } else if (next === "wiggle") {
         setAction("wiggle");
-        // Случайная фраза
         const phrases = SPEECH[mood] || SPEECH.neutral;
         setSpeechBubble(phrases[Math.floor(Math.random() * phrases.length)]);
         setTimeout(() => { setAction("idle"); setSpeechBubble(""); }, 2500);
@@ -124,28 +119,12 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
     setTimeout(() => setParticles([]), 1200);
   }, []);
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const diff = touchStartY.current - e.changedTouches[0].clientY;
-    if (diff > 50) {
-      setAction("celebrate");
-      showParticles(["🍎", "🥕", "🍪", "🍕", "🧁"]);
-      setSpeechBubble("Вкусняшка!");
-      playPetHappy();
-      setTimeout(() => { setAction("idle"); setSpeechBubble(""); }, 1000);
-      onSwipeUp();
-    }
-  };
-
-  const handleClick = () => {
+  const handlePlay = () => {
     setTapScale(1.25);
     setTimeout(() => setTapScale(1), 200);
     setAction("celebrate");
     showParticles(["💖", "⭐", "✨", "💕", "🌟"]);
-    setEyeState("squint"); // Щурится от радости
+    setEyeState("squint");
     setSpeechBubble("Ура!");
     playTap();
     if (navigator.vibrate) navigator.vibrate(40);
@@ -155,6 +134,15 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
       setSpeechBubble("");
     }, 800);
     onTap();
+  };
+
+  const handleFeed = () => {
+    setAction("celebrate");
+    showParticles(["🍎", "🥕", "🍪", "🍕", "🧁"]);
+    setSpeechBubble("Вкусняшка!");
+    playPetHappy();
+    setTimeout(() => { setAction("idle"); setSpeechBubble(""); }, 1000);
+    onSwipeUp();
   };
 
   // Фон
@@ -178,7 +166,6 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
   const collarKey = accessories.find((a) => ACC_SLOTS[a] === "collar");
   const wingsKey = accessories.find((a) => ACC_SLOTS[a] === "wings");
 
-  // CSS-класс анимации
   const animClass =
     action === "walk" ? "ps-walk" :
     action === "jump" ? "ps-jump" :
@@ -187,94 +174,97 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
     action === "celebrate" ? "ps-celebrate" :
     "ps-breathe";
 
-  // Фильтр по настроению
   const moodFilter =
     pet.mood === "sad" ? "saturate(0.6)" :
     pet.mood === "hungry" ? "saturate(0.7) brightness(0.95)" :
     pet.mood === "sleepy" ? "brightness(0.9)" :
     "none";
 
+  const isFlipped = direction === "left";
+
   return (
-    <div
-      className="ps-scene"
-      style={{ background: bgStyle.bg }}
-      onClick={handleClick}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      {/* Фоновые декорации */}
-      <div className="ps-bg-layer">
-        {bgStyle.extras.map((e, i) => (
-          <span key={i} className={`ps-deco ps-d${i}`}>{e}</span>
-        ))}
-      </div>
-
-      {/* Земля */}
-      <div className="ps-ground" style={{ backgroundColor: bgStyle.ground }}>
-        {/* Травинки/детали */}
-        <span className="ps-grass g1">🌱</span>
-        <span className="ps-grass g2">🌱</span>
-        <span className="ps-grass g3">🌿</span>
-      </div>
-
-      {/* === ПИТОМЕЦ === */}
-      <div
-        className="ps-pet-wrap"
-        style={{
-          left: `${posX}%`,
-          transform: `translateX(-50%) ${direction === "left" ? "scaleX(-1)" : ""}`,
-          filter: moodFilter,
-        }}
-      >
-        {/* Тень под питомцем */}
-        <div className={`ps-shadow ${animClass}`} />
-
-        {/* Контейнер с аксессуарами */}
-        <div className="ps-pet-body-wrap" style={{ transform: `scale(${tapScale})`, transition: "transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1)" }}>
-          {/* Крылья — за спиной */}
-          {wingsKey && <span className="ps-acc ps-wings">{ACC_EMOJIS[wingsKey]}</span>}
-
-          {/* Шляпа */}
-          {hatKey && <span className="ps-acc ps-hat">{ACC_EMOJIS[hatKey]}</span>}
-
-          {/* Основной эмодзи питомца */}
-          <div className={`ps-pet ${animClass}`}>
-            <span className="ps-emoji">{PET_EMOJIS[pet.type] || "🐾"}</span>
-          </div>
-
-          {/* Глаза / моргание — накладка */}
-          {eyeState === "blink" && <div className="ps-blink-overlay" />}
-          {eyeState === "squint" && <div className="ps-squint-overlay">😆</div>}
-
-          {/* Очки */}
-          {glassesKey && <span className="ps-acc ps-glasses">{ACC_EMOJIS[glassesKey]}</span>}
-
-          {/* Ошейник */}
-          {collarKey && <span className="ps-acc ps-collar">{ACC_EMOJIS[collarKey]}</span>}
+    <div className="ps-wrapper">
+      <div className="ps-scene" style={{ background: bgStyle.bg }}>
+        {/* Фоновые декорации */}
+        <div className="ps-bg-layer">
+          {bgStyle.extras.map((e, i) => (
+            <span key={i} className={`ps-deco ps-d${i}`}>{e}</span>
+          ))}
         </div>
 
-        {/* Речевой пузырь */}
-        {speechBubble && (
-          <div className="ps-bubble">
-            <span>{speechBubble}</span>
+        {/* Земля */}
+        <div className="ps-ground" style={{ backgroundColor: bgStyle.ground }}>
+          <span className="ps-grass g1">🌱</span>
+          <span className="ps-grass g2">🌱</span>
+          <span className="ps-grass g3">🌿</span>
+        </div>
+
+        {/* === ПИТОМЕЦ === */}
+        <div
+          className="ps-pet-wrap"
+          style={{
+            left: `${posX}%`,
+            transform: `translateX(-50%)`,
+            filter: moodFilter,
+          }}
+        >
+          {/* Речевой пузырь — ВНЕ зеркальной обёртки, всегда читаемый */}
+          {speechBubble && (
+            <div className="ps-bubble">
+              <span>{speechBubble}</span>
+            </div>
+          )}
+
+          {/* Тень */}
+          <div className={`ps-shadow ${action === "jump" ? "ps-jump" : ""}`} />
+
+          {/* Тело питомца — зеркалится только эта часть */}
+          <div
+            className="ps-pet-body-wrap"
+            style={{
+              transform: `scale(${tapScale}) ${isFlipped ? "scaleX(-1)" : ""}`,
+              transition: "transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
+          >
+            {wingsKey && <span className="ps-acc ps-wings">{ACC_EMOJIS[wingsKey]}</span>}
+            {hatKey && <span className="ps-acc ps-hat">{ACC_EMOJIS[hatKey]}</span>}
+
+            <div className={`ps-pet ${animClass}`}>
+              <span className="ps-emoji">{PET_EMOJIS[pet.type] || "🐾"}</span>
+            </div>
+
+            {eyeState === "blink" && <div className="ps-blink-overlay" />}
+            {eyeState === "squint" && <div className="ps-squint-overlay">😆</div>}
+
+            {glassesKey && <span className="ps-acc ps-glasses">{ACC_EMOJIS[glassesKey]}</span>}
+            {collarKey && <span className="ps-acc ps-collar">{ACC_EMOJIS[collarKey]}</span>}
+          </div>
+        </div>
+
+        {/* Настроение */}
+        <div className="ps-mood">{MOOD_FACES[pet.mood] || "😊"}</div>
+
+        {/* Частицы */}
+        {particles.length > 0 && (
+          <div className="ps-particles">
+            {particles.map((p, i) => (
+              <span key={i} className={`ps-p ps-p${i}`}>{p}</span>
+            ))}
           </div>
         )}
       </div>
 
-      {/* Настроение */}
-      <div className="ps-mood">{MOOD_FACES[pet.mood] || "😊"}</div>
-
-      {/* Частицы */}
-      {particles.length > 0 && (
-        <div className="ps-particles">
-          {particles.map((p, i) => (
-            <span key={i} className={`ps-p ps-p${i}`}>{p}</span>
-          ))}
-        </div>
-      )}
-
-      {/* Подсказка */}
-      <div className="ps-hint">Нажми — поиграть · Свайп ↑ — покормить</div>
+      {/* Кнопки взаимодействия — ПОД сценой */}
+      <div className="ps-actions">
+        <button className="ps-action-btn ps-play-btn" onClick={handlePlay}>
+          <span className="ps-action-icon">🎾</span>
+          <span className="ps-action-label">Поиграть</span>
+        </button>
+        <button className="ps-action-btn ps-feed-btn" onClick={handleFeed}>
+          <span className="ps-action-icon">🍎</span>
+          <span className="ps-action-label">Покормить</span>
+        </button>
+      </div>
     </div>
   );
 }
