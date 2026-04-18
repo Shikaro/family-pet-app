@@ -118,7 +118,7 @@ export interface ChildAchievement {
 
 // === Аксессуары питомца ===
 
-export type AccessorySlot = "hat" | "glasses" | "background" | "collar" | "wings";
+export type AccessorySlot = "house" | "toy" | "background" | "bowl" | "bed";
 
 export interface PetAccessory {
   id: string;

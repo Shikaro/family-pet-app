@@ -11,18 +11,18 @@ interface Props {
 }
 
 const SLOT_LABELS: Record<AccessorySlot, string> = {
-  hat: "Шляпы",
-  glasses: "Очки",
-  background: "Фоны",
-  collar: "Ошейники",
-  wings: "Крылья",
+  house: "🏠 Домики",
+  toy: "🎾 Игрушки",
+  bowl: "🍽️ Миски",
+  bed: "🛏️ Лежанки",
+  background: "🌄 Фоны",
 };
 
-const SLOT_ORDER: AccessorySlot[] = ["hat", "glasses", "collar", "wings", "background"];
+const SLOT_ORDER: AccessorySlot[] = ["house", "toy", "bowl", "bed", "background"];
 
 export default function AccessoryShop({ childId, coins, onCoinsChange, onClose }: Props) {
   const [accessories, setAccessories] = useState<AccessoryInfo[]>([]);
-  const [activeSlot, setActiveSlot] = useState<AccessorySlot>("hat");
+  const [activeSlot, setActiveSlot] = useState<AccessorySlot>("house");
   const [buying, setBuying] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function AccessoryShop({ childId, coins, onCoinsChange, onClose }
       const data = await getChildAccessories(childId);
       setAccessories(data);
     } catch (e) {
-      console.error("Ошибка загрузки аксессуаров:", e);
+      console.error("Ошибка загрузки:", e);
     }
   }
 
@@ -67,11 +67,10 @@ export default function AccessoryShop({ childId, coins, onCoinsChange, onClose }
     <div className="accessory-shop">
       <div className="accessory-header">
         <button className="back-btn" onClick={onClose}>←</button>
-        <h2>Гардероб</h2>
+        <h2>Магазин</h2>
         <span className="coins-display">🪙 {coins}</span>
       </div>
 
-      {/* Слоты */}
       <div className="slot-tabs">
         {SLOT_ORDER.map((slot) => (
           <button
@@ -84,7 +83,6 @@ export default function AccessoryShop({ childId, coins, onCoinsChange, onClose }
         ))}
       </div>
 
-      {/* Предметы */}
       <div className="accessory-grid">
         {slotItems.map((acc) => (
           <div key={acc.key} className={`accessory-card ${acc.equipped ? "equipped" : ""}`}>
@@ -104,7 +102,7 @@ export default function AccessoryShop({ childId, coins, onCoinsChange, onClose }
                 className={`equip-btn ${acc.equipped ? "active" : ""}`}
                 onClick={() => handleEquip(acc.key, !acc.equipped)}
               >
-                {acc.equipped ? "Снять" : "Надеть"}
+                {acc.equipped ? "Убрать" : "Поставить"}
               </button>
             )}
           </div>

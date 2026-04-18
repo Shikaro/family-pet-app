@@ -185,7 +185,7 @@ export default function ChildDashboard() {
           🏆 Достижения
         </button>
         <button className="quick-btn" onClick={() => setShowAccessories(true)}>
-          👗 Гардероб
+          🏪 Магазин
         </button>
         <button className="quick-btn" onClick={() => setShowChallenges(true)}>
           🎪 Челленджи

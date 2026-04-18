@@ -27,18 +27,19 @@ const BG_STYLES: Record<string, { bg: string; ground: string; extras: string[] }
   bg_rainbow: { bg: "linear-gradient(180deg, #ff9a9e 0%, #fecfef 25%, #fdfcfb 50%, #a8edea 75%, #fed6e3 100%)", ground: "#b8f0b8", extras: ["🌈", "☁️", "🦄", "💫"] },
 };
 
-const ACC_EMOJIS: Record<string, string> = {
-  hat_crown: "👑", hat_cap: "🧢", hat_wizard: "🎩", hat_flower: "🌸", hat_party: "🎉",
-  glasses_sun: "🕶️", glasses_nerd: "🤓", glasses_star: "⭐",
-  collar_bow: "🎀", collar_bell: "🔔", collar_star: "✨",
-  wings_angel: "😇", wings_dragon: "🐉", wings_butterfly: "🦋",
+// Предметы для сцены (не на питомце, а вокруг)
+const ITEM_EMOJIS: Record<string, string> = {
+  house_kennel: "🏠", house_castle: "🏰", house_tent: "⛺", house_igloo: "🧊", house_nest: "🪹",
+  toy_ball: "🎾", toy_bone: "🦴", toy_mouse: "🐭", toy_frisbee: "🥏", toy_teddy: "🧸",
+  bowl_basic: "🍽️", bowl_golden: "🥇", bowl_fountain: "⛲",
+  bed_pillow: "🛏️", bed_hammock: "🪑", bed_basket: "🧺",
 };
 
-const ACC_SLOTS: Record<string, string> = {
-  hat_crown: "hat", hat_cap: "hat", hat_wizard: "hat", hat_flower: "hat", hat_party: "hat",
-  glasses_sun: "glasses", glasses_nerd: "glasses", glasses_star: "glasses",
-  collar_bow: "collar", collar_bell: "collar", collar_star: "collar",
-  wings_angel: "wings", wings_dragon: "wings", wings_butterfly: "wings",
+const ITEM_SLOTS: Record<string, string> = {
+  house_kennel: "house", house_castle: "house", house_tent: "house", house_igloo: "house", house_nest: "house",
+  toy_ball: "toy", toy_bone: "toy", toy_mouse: "toy", toy_frisbee: "toy", toy_teddy: "toy",
+  bowl_basic: "bowl", bowl_golden: "bowl", bowl_fountain: "bowl",
+  bed_pillow: "bed", bed_hammock: "bed", bed_basket: "bed",
 };
 
 interface Props {
@@ -160,11 +161,11 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
         extras: ["☁️", "☁️", "🌤️"],
       };
 
-  // Аксессуары
-  const hatKey = accessories.find((a) => ACC_SLOTS[a] === "hat");
-  const glassesKey = accessories.find((a) => ACC_SLOTS[a] === "glasses");
-  const collarKey = accessories.find((a) => ACC_SLOTS[a] === "collar");
-  const wingsKey = accessories.find((a) => ACC_SLOTS[a] === "wings");
+  // Предметы на сцене
+  const houseKey = accessories.find((a) => ITEM_SLOTS[a] === "house");
+  const toyKey = accessories.find((a) => ITEM_SLOTS[a] === "toy");
+  const bowlKey = accessories.find((a) => ITEM_SLOTS[a] === "bowl");
+  const bedKey = accessories.find((a) => ITEM_SLOTS[a] === "bed");
 
   const animClass =
     action === "walk" ? "ps-walk" :
@@ -199,6 +200,12 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
           <span className="ps-grass g3">🌿</span>
         </div>
 
+        {/* Предметы на сцене — домик, миска, лежанка */}
+        {houseKey && <span className="ps-item ps-item-house">{ITEM_EMOJIS[houseKey]}</span>}
+        {bowlKey && <span className="ps-item ps-item-bowl">{ITEM_EMOJIS[bowlKey]}</span>}
+        {bedKey && <span className="ps-item ps-item-bed">{ITEM_EMOJIS[bedKey]}</span>}
+        {toyKey && <span className="ps-item ps-item-toy">{ITEM_EMOJIS[toyKey]}</span>}
+
         {/* === ПИТОМЕЦ === */}
         <div
           className="ps-pet-wrap"
@@ -208,7 +215,7 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
             filter: moodFilter,
           }}
         >
-          {/* Речевой пузырь — ВНЕ зеркальной обёртки, всегда читаемый */}
+          {/* Речевой пузырь */}
           {speechBubble && (
             <div className="ps-bubble">
               <span>{speechBubble}</span>
@@ -218,7 +225,7 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
           {/* Тень */}
           <div className={`ps-shadow ${action === "jump" ? "ps-jump" : ""}`} />
 
-          {/* Тело питомца — зеркалится только эта часть */}
+          {/* Тело питомца */}
           <div
             className="ps-pet-body-wrap"
             style={{
@@ -226,18 +233,12 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
               transition: "transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1)",
             }}
           >
-            {wingsKey && <span className="ps-acc ps-wings">{ACC_EMOJIS[wingsKey]}</span>}
-            {hatKey && <span className="ps-acc ps-hat">{ACC_EMOJIS[hatKey]}</span>}
-
             <div className={`ps-pet ${animClass}`}>
               <span className="ps-emoji">{PET_EMOJIS[pet.type] || "🐾"}</span>
             </div>
 
             {eyeState === "blink" && <div className="ps-blink-overlay" />}
             {eyeState === "squint" && <div className="ps-squint-overlay">😆</div>}
-
-            {glassesKey && <span className="ps-acc ps-glasses">{ACC_EMOJIS[glassesKey]}</span>}
-            {collarKey && <span className="ps-acc ps-collar">{ACC_EMOJIS[collarKey]}</span>}
           </div>
         </div>
 

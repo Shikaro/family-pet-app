@@ -703,43 +703,37 @@ input, select {
   animation: psPopIn 0.2s ease;
 }
 
-/* Аксессуары */
-.ps-acc {
+/* Предметы на сцене */
+.ps-item {
   position: absolute;
-  z-index: 5;
+  z-index: 1;
   pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
 }
-.ps-hat {
-  top: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2.2rem;
+.ps-item-house {
+  font-size: 2.4rem;
+  bottom: 44px;
+  right: 10%;
 }
-.ps-glasses {
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.6rem;
-}
-.ps-collar {
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
+.ps-item-toy {
   font-size: 1.4rem;
+  bottom: 48px;
+  left: 15%;
+  animation: psToyBounce 3s ease-in-out infinite;
 }
-.ps-wings {
-  top: 15%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2.5rem;
-  z-index: 0;
-  opacity: 0.7;
-  animation: psWingFlap 2s ease-in-out infinite;
+.ps-item-bowl {
+  font-size: 1.5rem;
+  bottom: 44px;
+  left: 30%;
 }
-@keyframes psWingFlap {
-  0%, 100% { transform: translateX(-50%) scaleX(1); }
-  50% { transform: translateX(-50%) scaleX(1.2); }
+.ps-item-bed {
+  font-size: 1.6rem;
+  bottom: 44px;
+  right: 28%;
+}
+@keyframes psToyBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(5deg); }
 }
 
 /* Речевой пузырь — вне scaleX(-1), всегда читаемый */

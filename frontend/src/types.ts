@@ -108,7 +108,7 @@ export interface AchievementInfo {
 }
 
 // === Аксессуары ===
-export type AccessorySlot = "hat" | "glasses" | "background" | "collar" | "wings";
+export type AccessorySlot = "house" | "toy" | "background" | "bowl" | "bed";
 
 export interface AccessoryInfo {
   id: string;
