@@ -518,7 +518,7 @@ input, select {
 
 .ps-scene {
   position: relative;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
   user-select: none;
   border-radius: 0 0 16px 16px;
@@ -703,19 +703,46 @@ input, select {
   animation: psPopIn 0.2s ease;
 }
 
-/* Предметы на сцене — на земле, как декорации */
-.ps-item {
+/* Домик — крупный, на заднем плане */
+.ps-house {
   position: absolute;
-  font-size: 1.4rem;
+  right: 4%;
+  bottom: 36px;
   z-index: 1;
   pointer-events: none;
-  bottom: 44px;
-  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.12));
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
 }
-.ps-pos-left { left: 8%; }
-.ps-pos-right { right: 8%; }
-.ps-pos-center-left { left: 26%; }
-.ps-pos-center-right { right: 26%; }
+.ps-house-emoji {
+  font-size: 3.5rem;
+  display: block;
+}
+
+/* Предметы на земле */
+.ps-ground-item {
+  position: absolute;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+}
+.ps-bed {
+  font-size: 2rem;
+  left: 6%;
+  bottom: 2px;
+}
+.ps-bowl {
+  font-size: 1.6rem;
+  left: 32%;
+  bottom: 2px;
+}
+.ps-toy {
+  font-size: 1.3rem;
+  right: 30%;
+  bottom: 4px;
+  animation: psToyIdle 4s ease-in-out infinite;
+}
+@keyframes psToyIdle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+}
 
 /* Речевой пузырь — вне scaleX(-1), всегда читаемый */
 .ps-bubble {

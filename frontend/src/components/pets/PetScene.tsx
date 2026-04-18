@@ -188,12 +188,19 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
   return (
     <div className="ps-wrapper">
       <div className="ps-scene" style={{ background: bgStyle.bg }}>
-        {/* Фоновые декорации — мелкие, полупрозрачные */}
+        {/* Фоновые декорации */}
         <div className="ps-bg-layer">
           {bgStyle.extras.map((e, i) => (
             <span key={i} className={`ps-deco ps-d${i}`}>{e}</span>
           ))}
         </div>
+
+        {/* Домик — большой, на заднем плане справа */}
+        {houseKey && (
+          <div className="ps-house">
+            <span className="ps-house-emoji">{ITEM_EMOJIS[houseKey]}</span>
+          </div>
+        )}
 
         {/* Земля */}
         <div className="ps-ground" style={{ backgroundColor: bgStyle.ground }}>
@@ -204,13 +211,22 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
               <span className="ps-grass g3">🌿</span>
             </>
           )}
-        </div>
 
-        {/* Предметы на сцене — на полу, по краям */}
-        {houseKey && <span className="ps-item ps-pos-left">{ITEM_EMOJIS[houseKey]}</span>}
-        {bedKey && <span className="ps-item ps-pos-right">{ITEM_EMOJIS[bedKey]}</span>}
-        {bowlKey && <span className="ps-item ps-pos-center-left">{ITEM_EMOJIS[bowlKey]}</span>}
-        {toyKey && <span className="ps-item ps-pos-center-right">{ITEM_EMOJIS[toyKey]}</span>}
+          {/* Лежанка — на земле слева */}
+          {bedKey && (
+            <span className="ps-ground-item ps-bed">{ITEM_EMOJIS[bedKey]}</span>
+          )}
+
+          {/* Миска — на земле, левее центра */}
+          {bowlKey && (
+            <span className="ps-ground-item ps-bowl">{ITEM_EMOJIS[bowlKey]}</span>
+          )}
+
+          {/* Игрушка — на земле, правее центра */}
+          {toyKey && (
+            <span className="ps-ground-item ps-toy">{ITEM_EMOJIS[toyKey]}</span>
+          )}
+        </div>
 
         {/* === ПИТОМЕЦ === */}
         <div
