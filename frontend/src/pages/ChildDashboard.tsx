@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { useProfile } from "../context/ProfileContext";
-import { getChildDashboard, completeTask, feedPet, playPet } from "../api";
-import { ChildDashboard as ChildDashboardData, Task, TaskCompletion } from "../types";
+import { getChildDashboard, completeTask, feedPet, playPet, getRank, checkAchievements } from "../api";
+import { ChildDashboard as ChildDashboardData, Task, TaskCompletion, RankInfo } from "../types";
 import PetScene from "../components/pets/PetScene";
 import PetSelectPage from "./PetSelectPage";
 import CoinAnimation from "../components/CoinAnimation";
 import LessonGame from "../components/LessonGame";
 import RewardShop from "../components/RewardShop";
+import AchievementsPanel from "../components/AchievementsPanel";
+import AccessoryShop from "../components/AccessoryShop";
+import ChallengesPanel from "../components/ChallengesPanel";
+import Leaderboard from "../components/Leaderboard";
 import { playComplete, playPetHappy } from "../utils/sounds";
 
 const TIME_LABELS: Record<string, string> = {
@@ -40,6 +44,11 @@ export default function ChildDashboard() {
   const [showLesson, setShowLesson] = useState(false);
   const [showShop, setShowShop] = useState(false);
   const [activeTab, setActiveTab] = useState<"tasks" | "learn" | "shop">("tasks");
+  const [showAchievements, setShowAchievements] = useState(false);
+  const [showAccessories, setShowAccessories] = useState(false);
+  const [showChallenges, setShowChallenges] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [rankInfo, setRankInfo] = useState<RankInfo | null>(null);
 
   const load = async () => {
     if (!activeChild) return;
@@ -47,6 +56,11 @@ export default function ChildDashboard() {
       const d = await getChildDashboard(activeChild.id);
       setData(d);
       if (!d.pet) setNeedsPet(true);
+      // Загрузить ранг
+      try {
+        const r = await getRank(activeChild.id);
+        setRankInfo(r);
+      } catch {}
     } catch {}
   };
 
@@ -81,6 +95,29 @@ export default function ChildDashboard() {
     );
   }
 
+  if (showAchievements) {
+    return <AchievementsPanel childId={activeChild.id} onClose={() => setShowAchievements(false)} />;
+  }
+
+  if (showAccessories) {
+    return (
+      <AccessoryShop
+        childId={activeChild.id}
+        coins={data.coins}
+        onCoinsChange={(coins) => setData({ ...data, coins })}
+        onClose={() => { setShowAccessories(false); load(); }}
+      />
+    );
+  }
+
+  if (showChallenges) {
+    return <ChallengesPanel childId={activeChild.id} onClose={() => setShowChallenges(false)} />;
+  }
+
+  if (showLeaderboard) {
+    return <Leaderboard onClose={() => setShowLeaderboard(false)} />;
+  }
+
   const completedIds = new Set(data.completedToday.map((c: TaskCompletion) => c.taskId));
   const filteredTasks = data.tasks.filter((t: Task) =>
     t.timeOfDay === activeTime || t.timeOfDay === "anytime"
@@ -97,6 +134,8 @@ export default function ChildDashboard() {
       playComplete();
       setShowCoins(task.reward);
       if (navigator.vibrate) navigator.vibrate([50, 30, 80]);
+      // Проверяем новые достижения
+      try { await checkAchievements(activeChild.id); } catch {}
       await load();
     } catch {}
     setCompletingId(null);
@@ -121,9 +160,28 @@ export default function ChildDashboard() {
       <div className="child-header">
         <button className="back-btn" onClick={setParentMode}>←</button>
         <div className="child-info">
-          <span className="child-name">{activeChild.name}</span>
+          <span className="child-name">
+            {activeChild.name}
+            {rankInfo && <span className="rank-badge">{rankInfo.rank.emoji} {rankInfo.rank.title}</span>}
+          </span>
           <span className="child-stats">🪙 {data.coins} · 🔥 {data.streakDays} дн.</span>
         </div>
+      </div>
+
+      {/* Быстрые кнопки */}
+      <div className="quick-actions">
+        <button className="quick-btn" onClick={() => setShowAchievements(true)}>
+          🏆 Достижения
+        </button>
+        <button className="quick-btn" onClick={() => setShowAccessories(true)}>
+          👗 Гардероб
+        </button>
+        <button className="quick-btn" onClick={() => setShowChallenges(true)}>
+          🎪 Челленджи
+        </button>
+        <button className="quick-btn" onClick={() => setShowLeaderboard(true)}>
+          📊 Рейтинг
+        </button>
       </div>
 
       {/* Питомец */}
