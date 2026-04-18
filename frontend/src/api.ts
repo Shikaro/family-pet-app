@@ -119,6 +119,13 @@ export async function createReward(title: string, cost: number, emoji: string, d
   });
 }
 
+export async function updateReward(id: string, data: { title?: string; cost?: number; emoji?: string; description?: string }) {
+  return request<any>(`/rewards/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+}
+
 export async function deleteReward(id: string) {
   return request<any>(`/rewards/${id}`, { method: "DELETE" });
 }

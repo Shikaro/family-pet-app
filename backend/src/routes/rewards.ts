@@ -56,6 +56,26 @@ router.post("/", authMiddleware, (req: AuthRequest, res: Response) => {
   res.json(reward);
 });
 
+// PUT /api/rewards/:id — обновить награду
+router.put("/:id", authMiddleware, (req: AuthRequest, res: Response) => {
+  const family = req.family!;
+  const rewards = getRewardsByFamily(family.id);
+  const reward = rewards.find((r) => r.id === req.params.id);
+
+  if (!reward) {
+    return res.status(404).json({ error: "Награда не найдена" });
+  }
+
+  const { title, description, emoji, cost } = req.body;
+  if (title !== undefined) reward.title = title;
+  if (description !== undefined) reward.description = description;
+  if (emoji !== undefined) reward.emoji = emoji;
+  if (cost !== undefined) reward.cost = Number(cost);
+
+  saveReward(reward);
+  res.json(reward);
+});
+
 // DELETE /api/rewards/:id — удалить награду
 router.delete("/:id", authMiddleware, (req: AuthRequest, res: Response) => {
   const family = req.family!;

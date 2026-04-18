@@ -1611,6 +1611,28 @@ input, select {
   font-weight: 700;
   font-size: 0.9rem;
   flex-shrink: 0;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.reward-manage-cost:active {
+  background: #f1f5f9;
+}
+
+.reward-edit-cost {
+  flex-shrink: 0;
+}
+
+.reward-edit-cost input {
+  width: 60px;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: center;
+  border: 2px solid var(--purple);
+  border-radius: 10px;
 }
 
 .reward-delete-btn {

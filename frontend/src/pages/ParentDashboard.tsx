@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useProfile } from "../context/ProfileContext";
-import { getParentDashboard, getRewards, createReward, deleteReward } from "../api";
+import { getParentDashboard, getRewards, createReward, deleteReward, updateReward } from "../api";
 import { Child, Pet, Task, TaskCompletion, Reward } from "../types";
 
 interface ChildStat {
@@ -34,6 +34,8 @@ export default function ParentDashboard() {
   const [rewardEmoji, setRewardEmoji] = useState("🎁");
   const [rewardDesc, setRewardDesc] = useState("");
   const [parentTab, setParentTab] = useState<"children" | "rewards">("children");
+  const [editingRewardId, setEditingRewardId] = useState<string | null>(null);
+  const [editCost, setEditCost] = useState("");
 
   const load = async () => {
     try {
@@ -65,6 +67,20 @@ export default function ParentDashboard() {
   const handleDeleteReward = async (id: string) => {
     try {
       await deleteReward(id);
+      await load();
+    } catch {}
+  };
+
+  const handleEditCost = (r: Reward) => {
+    setEditingRewardId(r.id);
+    setEditCost(String(r.cost));
+  };
+
+  const handleSaveCost = async () => {
+    if (!editingRewardId || !editCost) return;
+    try {
+      await updateReward(editingRewardId, { cost: Number(editCost) });
+      setEditingRewardId(null);
       await load();
     } catch {}
   };
@@ -266,7 +282,22 @@ export default function ParentDashboard() {
                     <span className="reward-manage-title">{r.title}</span>
                     {r.description && <span className="reward-manage-desc">{r.description}</span>}
                   </div>
-                  <span className="reward-manage-cost">🪙 {r.cost}</span>
+                  {editingRewardId === r.id ? (
+                    <div className="reward-edit-cost">
+                      <input
+                        type="number"
+                        min="1"
+                        max="999"
+                        value={editCost}
+                        onChange={(e) => setEditCost(e.target.value)}
+                        autoFocus
+                        onBlur={handleSaveCost}
+                        onKeyDown={(e) => e.key === "Enter" && handleSaveCost()}
+                      />
+                    </div>
+                  ) : (
+                    <span className="reward-manage-cost" onClick={() => handleEditCost(r)}>🪙 {r.cost}</span>
+                  )}
                   <button className="reward-delete-btn" onClick={() => handleDeleteReward(r.id)}>✕</button>
                 </div>
               ))
