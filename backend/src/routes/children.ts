@@ -32,6 +32,8 @@ router.post("/", authMiddleware, (req: AuthRequest, res: Response) => {
     coins: 0,
     streakDays: 0,
     lastActiveDate: null,
+    totalCompleted: 0,
+    rankLevel: 1,
   };
 
   family.children.push(child);
