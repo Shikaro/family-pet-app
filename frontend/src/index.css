@@ -576,23 +576,26 @@ input, select {
 }
 
 /* Предметы на земле — PNG-иллюстрации */
+/* Гамак/лежанка — слева */
 .ps-scene-bed {
   position: absolute;
-  left: 0%;
-  bottom: 10px;
+  left: 2%;
+  bottom: 8px;
   z-index: 2;
 }
+/* Миска — рядом с домиком справа */
 .ps-scene-bowl {
   position: absolute;
-  left: 24%;
-  bottom: 12px;
+  right: 28%;
+  bottom: 8px;
   z-index: 2;
 }
+/* Игрушка — у домика */
 .ps-scene-toy {
   position: absolute;
-  right: 30%;
-  bottom: 14px;
-  z-index: 1;
+  right: 18%;
+  bottom: 10px;
+  z-index: 2;
 }
 
 .ps-img-ground {
@@ -606,6 +609,56 @@ input, select {
   height: auto;
   filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
   pointer-events: none;
+}
+
+/* Дорожка от лежанки к домику */
+.ps-path {
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  right: 20%;
+  height: 22px;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(180, 160, 130, 0.5) 0px,
+    rgba(180, 160, 130, 0.5) 12px,
+    transparent 12px,
+    transparent 18px
+  );
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+/* Фоновые деревья/кусты */
+.ps-bg-tree {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  font-size: 2rem;
+  opacity: 0.3;
+  filter: blur(1px);
+}
+.ps-bg-tree-1 { left: 3%; bottom: 55px; font-size: 2.2rem; }
+.ps-bg-tree-2 { left: 18%; bottom: 60px; font-size: 1.6rem; opacity: 0.2; }
+.ps-bg-tree-3 { right: 40%; bottom: 58px; font-size: 1.8rem; opacity: 0.25; }
+
+/* Облака */
+.ps-cloud {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  font-size: 1.5rem;
+  opacity: 0.25;
+  animation: psCloudDrift 20s linear infinite;
+}
+.ps-cloud-1 { top: 15px; left: -10%; animation-duration: 25s; }
+.ps-cloud-2 { top: 30px; left: -20%; animation-duration: 35s; animation-delay: 8s; font-size: 1.2rem; }
+
+@keyframes psCloudDrift {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw + 50px)); }
 }
 
 /* === Обёртка питомца === */

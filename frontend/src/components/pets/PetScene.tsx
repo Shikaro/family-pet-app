@@ -189,12 +189,25 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
   return (
     <div className="ps-wrapper">
       <div className="ps-scene" style={{ background: bgStyle.bg }}>
+        {/* Облака */}
+        <span className="ps-cloud ps-cloud-1">☁️</span>
+        <span className="ps-cloud ps-cloud-2">☁️</span>
+
         {/* Фоновые декорации */}
         <div className="ps-bg-layer">
           {bgStyle.extras.map((e, i) => (
             <span key={i} className={`ps-deco ps-d${i}`}>{e}</span>
           ))}
         </div>
+
+        {/* Фоновые деревья/кусты */}
+        {!hasCustomBg && (
+          <>
+            <span className="ps-bg-tree ps-bg-tree-1">🌳</span>
+            <span className="ps-bg-tree ps-bg-tree-2">🌲</span>
+            <span className="ps-bg-tree ps-bg-tree-3">🌿</span>
+          </>
+        )}
 
         {/* Домик — большой, на заднем плане справа */}
         {houseKey && (
@@ -205,6 +218,9 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
 
         {/* Земля */}
         <div className="ps-ground" style={{ backgroundColor: bgStyle.ground }} />
+
+        {/* Дорожка */}
+        <div className="ps-path" />
 
         {/* Предметы на земле */}
         {bedKey && (
