@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Pet } from "../../types";
 import { playTap, playPetHappy } from "../../utils/sounds";
-import { HOUSE_COMPONENTS, TOY_COMPONENTS, BOWL_COMPONENTS, BED_COMPONENTS, Plant } from "./SceneItems";
+import { HouseItem, GroundItem } from "./SceneItems";
 
 const PET_EMOJIS: Record<string, string> = {
   cat: "🐱", dog: "🐶", hamster: "🐹", parrot: "🦜",
@@ -196,18 +196,10 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
           ))}
         </div>
 
-        {/* Растения на заднем плане */}
-        {!hasCustomBg && (
-          <>
-            <div className="ps-plant ps-plant-1"><Plant variant={0} /></div>
-            <div className="ps-plant ps-plant-2"><Plant variant={1} /></div>
-          </>
-        )}
-
         {/* Домик — большой, на заднем плане справа */}
-        {houseKey && HOUSE_COMPONENTS[houseKey] && (
+        {houseKey && (
           <div className="ps-house-wrap">
-            {HOUSE_COMPONENTS[houseKey]()}
+            <HouseItem id={houseKey} />
           </div>
         )}
 
@@ -215,14 +207,14 @@ export default function PetScene({ pet, onTap, onSwipeUp }: Props) {
         <div className="ps-ground" style={{ backgroundColor: bgStyle.ground }} />
 
         {/* Предметы на земле */}
-        {bedKey && BED_COMPONENTS[bedKey] && (
-          <div className="ps-scene-bed">{BED_COMPONENTS[bedKey]()}</div>
+        {bedKey && (
+          <div className="ps-scene-bed"><GroundItem id={bedKey} /></div>
         )}
-        {bowlKey && BOWL_COMPONENTS[bowlKey] && (
-          <div className="ps-scene-bowl">{BOWL_COMPONENTS[bowlKey]()}</div>
+        {bowlKey && (
+          <div className="ps-scene-bowl"><GroundItem id={bowlKey} /></div>
         )}
-        {toyKey && TOY_COMPONENTS[toyKey] && (
-          <div className="ps-scene-toy">{TOY_COMPONENTS[toyKey]()}</div>
+        {toyKey && (
+          <div className="ps-scene-toy"><GroundItem id={toyKey} /></div>
         )}
 
         {/* === ПИТОМЕЦ === */}
